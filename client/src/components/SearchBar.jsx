@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { SearchContext } from '../App';
 import LoadingIcon from './LoadingIcon';
 
-const SearchBar = ({ isLoading, searchParams, setSearchParams }) => {
+const SearchBar = () => {
     const [search, setSearch] = useState('');
-    const navigate = useNavigate();
+    const { isLoading, searchParams, setSearchParams } =
+        useContext(SearchContext);
 
     const handleSearch = (event) => {
         event.preventDefault();
@@ -12,19 +13,14 @@ const SearchBar = ({ isLoading, searchParams, setSearchParams }) => {
         setSearchParams(newSearchParams);
     };
 
-    // useEffect(() => {
-    //     // navigate('/browse', { replace: true, state: { search: search } });
-    //     handleSearch();
-    // }, [search]);
-
     return (
-        <div className='search row'>
+        <div className='search-container row'>
             <form onSubmit={handleSearch}>
                 <label className='visually-hidden' htmlFor='search-input'>
                     Search:
                 </label>
                 <input
-                    id='search-input'
+                    className='search-input'
                     onChange={(event) => {
                         setSearch(event.target.value);
                     }}

@@ -3,22 +3,10 @@ import SortButton from './SortButton';
 
 const Sidebar = ({ searchParams, setSearchParams }) => {
     return (
-        <aside id='sidebar' className='col'>
-            <SortButton
-                field={'relevance'}
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
-            />
-            <SortButton
-                field={'price'}
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
-            />
-            <SortButton
-                field={'date'}
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
-            />
+        <aside className='sidebar col'>
+            <SortButton field={'relevance'} />
+            <SortButton field={'price'} />
+            <SortButton field={'date'} />
         </aside>
     );
 };

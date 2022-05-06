@@ -30,14 +30,14 @@ router.get('/', (req, res) => {
                 { $addFields: { score: { $meta: 'textScore' } } },
                 { $sort: sort ? sortOptions[sort] : sortOptions.relevance },
                 { $skip: parseInt(skip ? skip : 0) },
-                { $limit: parseInt(limit) },
+                { $limit: parseInt(limit ? limit : 20) },
             ];
         } else {
             return [
                 { $match: match },
                 { $sort: sort ? sortOptions[sort] : sortOptions.date_desc },
                 { $skip: parseInt(skip ? skip : 0) },
-                { $limit: parseInt(limit) },
+                { $limit: parseInt(limit ? limit : 20) },
             ];
         }
     };

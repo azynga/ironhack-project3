@@ -24,6 +24,18 @@ body {
     overflow: hidden;
 }
 
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 200px 1fr 250px;
+    grid-template-rows: 70px 1fr;
+    gap: 5px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        'brand search nav'
+        'sidebar main main';
+}
+
 .main-container {
     // display: grid;
     // grid-template-columns: 1fr 5fr 2fr;
@@ -39,21 +51,23 @@ body {
     // padding: 0 17px;
 }
 
-#main-content {
+.main-content {
     padding: 20px;
-    // grid-area: main;
+    padding-top: 15px;
+    grid-area: main;
     overflow: scroll;
     flex-grow: 1;
     height: 100%;
+    // background-color: aqua;
 }
 
-#sidebar {
-    // grid-area: sidebar;
-    background-color: hsl(275, 100%, 13%);
-    width: 155px;
+.sidebar {
+    grid-area: sidebar;
+    background-color: hsl(275, 100%, 23%);
+    width: 100%;
     height: 100%;
     padding: 20px;
-    padding-right: 0;
+    padding-top: 15px;
     row-gap: 5px;
     // justify-self: flex-start;
     // background-color: white;
@@ -125,56 +139,57 @@ h3 {
     margin: 0;
 }
 
-h1 {
-    grid-area: logo;
-    position: relative;
-    top: -4px;
-    padding: 0 7px;
-    text-transform: lowercase;
-    font-size: 50px;
-    font-weight: bold;
-    color: white;
-    -webkit-text-fill-color: white;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: hsl(275, 100%, 13%);
-    letter-spacing: -2px;
-
-    text-shadow: 1px 1px hsl(275, 100%, 13%), 1px 2px hsl(275, 100%, 13%),
-        2px 3px hsl(275, 100%, 13%), 2px 4px hsl(275, 100%, 13%),
-        3px 5px hsl(275, 100%, 13%), 3px 6px hsl(275, 100%, 13%),
-        4px 7px hsl(275, 100%, 13%), 4px 8px hsl(275, 100%, 13%);
-}
-
-header {
-    // display: grid;
-    // grid-template-columns: 0.5fr 3fr 2fr;
-    // grid-template-rows: 0.2fr;
-    // gap: 0px 0px;
-    // grid-template-areas: 'logo search nav';
-
-    width: 100%;
-    align-items: center;
-    // justify-content: space-between;
+.brand {
+    grid-area: brand;
     background-color: hsl(45, 74%, 51%);
-    padding: 10px;
-    // border-top: solid 5px hsl(275, 50%, 83%);
-    // border-bottom: solid 5px hsl(275, 50%, 83%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    h1 {
+        height: fit-content;
+        position: relative;
+        top: -4px;
+        left: -2px;
+        padding: 0 7px;
+        text-transform: lowercase;
+        font-size: 3rem;
+        font-weight: bold;
+        color: white;
+        -webkit-text-fill-color: white;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: hsl(275, 100%, 13%);
+        letter-spacing: -2px;
+
+        text-shadow: 1px 1px hsl(275, 100%, 13%), 1px 2px hsl(275, 100%, 13%),
+            2px 3px hsl(275, 100%, 13%), 2px 4px hsl(275, 100%, 13%),
+            3px 5px hsl(275, 100%, 13%), 3px 6px hsl(275, 100%, 13%),
+            4px 7px hsl(275, 100%, 13%), 4px 8px hsl(275, 100%, 13%);
+    }
 }
 
-nav {
-    // grid-area: nav;
-    // width: 400px;
-    justify-content: space-between;
+.header {
+    display: contents;
+}
+
+.nav {
+    grid-area: nav;
+    background-color: hsl(45, 74%, 51%);
+
+    justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 
     a {
+        height: 3rem;
+        width: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: relative;
         font-weight: bold;
-        font-size: 25px;
-        border: solid 3px transparent;
+        font-size: 1.5rem;
         border-radius: 5px;
-        padding: 7px;
     }
 
     a:hover {
@@ -190,16 +205,15 @@ nav {
     }
 }
 
-.search {
+.search-container {
     grid-area: search;
-
+    background-color: hsl(45, 74%, 51%);
     position: relative;
-    gap: 5px;
-    flex-grow: 1;
-    padding: 7px;
-    margin: 0 10px;
+    display: flex;
+    align-items: center;
 
     form {
+        height: fit-content;
         flex-grow: 1;
     }
 
@@ -207,7 +221,7 @@ nav {
         padding: 10px 2em 10px 1em;
         font-size: 18px;
         width: 100%;
-        height: 46px;
+        height: 3rem;
         // background-color: hsl(45, 4%, 50%);
         background-color: transparent;
         outline: none;

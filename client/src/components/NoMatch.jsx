@@ -5,15 +5,11 @@ const NoMatch = () => {
     const style = {
         width: '100%',
         height: '100%',
-        // backgroundColor: 'white',
-        display: 'flex',
-        justifyContent: 'center',
-        // alignItems: 'center',
     };
 
     return (
         <div style={style}>
-            <div className={'item'} style={{ margin: 30 }}>
+            <div className={'item'}>
                 This page does not exist. <br />
                 <Link to='/browse'>
                     <b>Wanna keep browsing?</b>

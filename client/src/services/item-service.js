@@ -5,7 +5,6 @@ const service = axios.create({
 });
 
 const getItems = (searchParams) => {
-    console.log('service params:', searchParams);
     return service.get('/items?' + searchParams);
 };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import { Routes, Route, useSearchParams, Navigate } from 'react-router-dom';
 
 import './App.scss';
@@ -8,10 +8,12 @@ import Header from './components/Header';
 import SideBar from './components/SideBar';
 import NoMatch from './components/NoMatch';
 
+export const SearchContext = createContext();
+
 const App = () => {
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [searchParams, setSearchParams] = useSearchParams({ limit: 20 });
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
         setIsLoading(true);
@@ -35,19 +37,19 @@ const App = () => {
     }, [searchParams]);
 
     return (
-        <div className='app col'>
-            <Header
-                isLoading={isLoading}
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
-            />
-            <div className='main-container row'>
-                <SideBar
-                    searchParams={searchParams}
-                    setSearchParams={setSearchParams}
-                />
+        <div className='container'>
+            <SearchContext.Provider
+                value={{
+                    isLoading,
+                    setIsLoading,
+                    searchParams,
+                    setSearchParams,
+                }}
+            >
+                <Header />
 
-                <main id='main-content'>
+                <SideBar />
+                <main className='main-content'>
                     <Routes>
                         <Route
                             path='/'
@@ -55,18 +57,13 @@ const App = () => {
                         />
                         <Route
                             path='/browse'
-                            element={
-                                <Browse
-                                    items={items}
-                                    searchParams={searchParams}
-                                    setSearchParams={setSearchParams}
-                                />
-                            }
+                            element={<Browse items={items} />}
                         />
+
                         <Route path='*' element={<NoMatch />} />
                     </Routes>
                 </main>
-            </div>
+            </SearchContext.Provider>
         </div>
     );
 };
