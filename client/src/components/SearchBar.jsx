@@ -9,7 +9,12 @@ const SearchBar = () => {
 
     const handleSearch = (event) => {
         event.preventDefault();
-        const newSearchParams = { ...Object.fromEntries(searchParams), search };
+        const newSearchParams = {
+            ...Object.fromEntries(searchParams),
+            search,
+            limit: 10,
+            sort: 'relevance',
+        };
         setSearchParams(newSearchParams);
     };
 

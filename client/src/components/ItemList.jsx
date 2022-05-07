@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { SearchContext } from '../App';
+import LoadButton from './LoadButton';
+import Item from './Item';
 
 const ItemList = ({ items }) => {
+    const { searchParams } = useContext(SearchContext);
+    const endOfResults = items.length < parseInt(searchParams.get('limit'));
+
     const itemList = items?.map((item) => {
-        return (
-            <div key={item._id} className='item'>
-                <h3>{item.title}</h3>
-                <p>{item.tags}</p>
-                <p>Price: {item.price}€</p>
-            </div>
-        );
+        return <Item key={item._id} item={item} />;
     });
 
     return (
-        <div id='item-list' className='col'>
+        <div className='item-list col'>
             {itemList}
+            {endOfResults ? '' : <LoadButton items={items} />}
         </div>
     );
 };

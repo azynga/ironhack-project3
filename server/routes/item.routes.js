@@ -28,14 +28,18 @@ router.get('/', (req, res) => {
                 { $match: { $text: { $search: search } } },
                 { $match: match },
                 { $addFields: { score: { $meta: 'textScore' } } },
-                { $sort: sort ? sortOptions[sort] : sortOptions.relevance },
+                {
+                    $sort: sort ? sortOptions[sort] : sortOptions.relevance,
+                },
                 { $skip: parseInt(skip ? skip : 0) },
                 { $limit: parseInt(limit ? limit : 20) },
             ];
         } else {
             return [
                 { $match: match },
-                { $sort: sort ? sortOptions[sort] : sortOptions.date_desc },
+                {
+                    $sort: sort ? sortOptions[sort] : sortOptions.date_desc,
+                },
                 { $skip: parseInt(skip ? skip : 0) },
                 { $limit: parseInt(limit ? limit : 20) },
             ];
@@ -44,6 +48,7 @@ router.get('/', (req, res) => {
 
     Item.aggregate(pipeline(req.query))
         .then((match) => {
+            console.log(match);
             res.json(match);
         })
         .catch((error) => {

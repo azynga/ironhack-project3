@@ -9,7 +9,7 @@ const LoadButton = () => {
             onClick={() => {
                 const newSearchParams = {
                     ...Object.fromEntries(searchParams),
-                    limit: parseInt(searchParams.get('limit')) + 20,
+                    limit: parseInt(searchParams.get('limit')) + 10,
                 };
                 setSearchParams(newSearchParams);
             }}
