@@ -1,11 +1,23 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { SearchContext } from '../App';
 import LoadingIcon from './LoadingIcon';
 
 const SearchBar = () => {
+    const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const { isLoading, searchParams, setSearchParams } =
         useContext(SearchContext);
+    const currentPath = useLocation().pathname;
+
+    useEffect(() => {
+        const lastSearch = searchParams.get('search');
+        if (lastSearch) {
+            setSearch(lastSearch);
+        } else {
+            setSearch('');
+        }
+    }, [currentPath]);
 
     const handleSearch = (event) => {
         event.preventDefault();
@@ -15,7 +27,14 @@ const SearchBar = () => {
             limit: 10,
             sort: 'relevance',
         };
-        setSearchParams(newSearchParams);
+
+        if (currentPath === '/browse') {
+            setSearchParams(newSearchParams);
+        } else {
+            navigate('/browse', {
+                state: newSearchParams,
+            });
+        }
     };
 
     return (

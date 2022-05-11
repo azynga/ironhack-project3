@@ -13,8 +13,6 @@ router.get('/', (req, res) => {
             sold,
         };
 
-        console.log(query);
-
         const sortOptions = {
             relevance: { score: -1 },
             price_asc: { price: 1 },
@@ -23,13 +21,18 @@ router.get('/', (req, res) => {
             date_desc: { updatedAt: -1 },
         };
 
+        // const sortStage = {...sortOptions[sort], _id: 1}
+
         if (search) {
             return [
                 { $match: { $text: { $search: search } } },
                 { $match: match },
                 { $addFields: { score: { $meta: 'textScore' } } },
                 {
-                    $sort: sort ? sortOptions[sort] : sortOptions.relevance,
+                    $sort: {
+                        ...(sort ? sortOptions[sort] : sortOptions.relevance),
+                        _id: 1,
+                    },
                 },
                 { $skip: parseInt(skip ? skip : 0) },
                 { $limit: parseInt(limit ? limit : 20) },
@@ -38,7 +41,10 @@ router.get('/', (req, res) => {
             return [
                 { $match: match },
                 {
-                    $sort: sort ? sortOptions[sort] : sortOptions.date_desc,
+                    $sort: {
+                        ...(sort ? sortOptions[sort] : sortOptions.date_desc),
+                        _id: 1,
+                    },
                 },
                 { $skip: parseInt(skip ? skip : 0) },
                 { $limit: parseInt(limit ? limit : 20) },
@@ -48,7 +54,6 @@ router.get('/', (req, res) => {
 
     Item.aggregate(pipeline(req.query))
         .then((match) => {
-            console.log(match);
             res.json(match);
         })
         .catch((error) => {

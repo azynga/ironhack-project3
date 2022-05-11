@@ -1,30 +1,42 @@
 import { useState, useEffect, createContext } from 'react';
-import {
-    Routes,
-    Route,
-    useSearchParams,
-    Navigate,
-    useNavigate,
-} from 'react-router-dom';
+import { Routes, Route, useSearchParams, Navigate } from 'react-router-dom';
 
 import './App.scss';
 import { getItems } from './services/item-service';
+import { loggedin } from './services/auth-service';
 import Header from './components/Header';
 import SideBar from './components/SideBar';
 import Browse from './components/Browse';
 import Create from './components/Create';
 import NoMatch from './components/NoMatch';
+import Signup from './components/Signup';
+import Login from './components/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export const SearchContext = createContext();
+export const UserContext = createContext();
 
 const App = () => {
+    const [loggedInUser, setLoggedInUser] = useState(null);
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchParams, setSearchParams] = useSearchParams({
         sort: 'date_desc',
         limit: 10,
     });
-    const navigate = useNavigate();
+
+    useEffect(() => console.log(loggedInUser));
+
+    useEffect(() => {
+        loggedin()
+            .then((response) => {
+                // console.log(response);
+                setLoggedInUser(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
     useEffect(() => {
         setIsLoading(true);
@@ -49,32 +61,45 @@ const App = () => {
 
     return (
         <div className='container'>
-            <SearchContext.Provider
-                value={{
-                    isLoading,
-                    setIsLoading,
-                    searchParams,
-                    setSearchParams,
-                }}
-            >
-                <Header />
+            <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+                <SearchContext.Provider
+                    value={{
+                        isLoading,
+                        setIsLoading,
+                        searchParams,
+                        setSearchParams,
+                    }}
+                >
+                    <Header />
 
-                <SideBar />
-                <main className='main-content'>
-                    <Routes>
-                        <Route
-                            path='/'
-                            element={<Navigate to='/browse' replace={true} />}
-                        />
-                        <Route
-                            path='/browse'
-                            element={<Browse items={items} />}
-                        />
-                        <Route path='/create' element={<Create />} />
-                        <Route path='*' element={<NoMatch />} />
-                    </Routes>
-                </main>
-            </SearchContext.Provider>
+                    <SideBar />
+                    <main className='main-content'>
+                        <Routes>
+                            <Route
+                                path='/'
+                                element={
+                                    <Navigate to='/browse' replace={true} />
+                                }
+                            />
+                            <Route
+                                path='/browse'
+                                element={<Browse items={items} />}
+                            />
+                            <Route
+                                path='/create'
+                                element={
+                                    <ProtectedRoute>
+                                        <Create />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route path='/signup' element={<Signup />} />
+                            <Route path='/login' element={<Login />} />
+                            <Route path='*' element={<NoMatch />} />
+                        </Routes>
+                    </main>
+                </SearchContext.Provider>
+            </UserContext.Provider>
         </div>
     );
 };

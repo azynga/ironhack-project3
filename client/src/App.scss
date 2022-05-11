@@ -70,8 +70,7 @@ body {
     padding-top: 15px;
     row-gap: 5px;
     border-right: solid 1px hsl(275, 100%, 23%);
-    // justify-self: flex-start;
-    // background-color: white;
+    transition: width 0.3s;
 }
 
 a {
@@ -80,9 +79,12 @@ a {
 }
 
 .item-list {
+    // border: solid 5px red;
     // padding: 10px;
+    display: flex;
     gap: 20px;
     align-items: center;
+    // flex-flow: row nowrap;
 }
 
 .item {
@@ -200,9 +202,16 @@ h3 {
     align-items: center;
     gap: 4px;
 
-    a {
+    button {
+        all: unset;
+        cursor: pointer;
+    }
+
+    a,
+    button {
         height: 3rem;
         width: 3rem;
+        // padding: 0 5px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -210,18 +219,28 @@ h3 {
         font-weight: bold;
         font-size: 1.5rem;
         border-radius: 5px;
+        transition: background-color 0.3s;
     }
 
-    a:hover {
+    a:hover,
+    button:hover {
         background-color: hsl(45, 74%, 61%);
+        transition: background-color 0.3s;
     }
 
-    a:active {
+    a:active,
+    button:active {
         background-color: hsl(45, 74%, 81%);
+        transition: background-color 0.3s;
     }
 
     .active {
         background-color: hsl(45, 74%, 81%) !important;
+    }
+
+    .login {
+        width: auto;
+        padding: 0 1rem;
     }
 }
 
@@ -270,5 +289,27 @@ h3 {
     .create-form {
         width: 500px;
         // background-color: white;
+    }
+}
+
+.white {
+    color: white;
+}
+
+.notify {
+    animation-name: notify;
+    animation-duration: 2s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+
+@keyframes notify {
+    from {
+        background-color: hsla(10, 74%, 51%, 0);
+        border-bottom: solid 0px hsla(10, 74%, 51%, 0);
+    }
+    to {
+        background-color: hsla(10, 74%, 51%, 0.2);
+        border-bottom: solid 3px hsla(10, 74%, 51%, 0.5);
     }
 }

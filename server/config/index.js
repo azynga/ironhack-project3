@@ -24,6 +24,11 @@ const MongoStore = require('connect-mongo');
 // Connects the mongo uri to maintain the same naming structure
 const MONGO_URI = require('../utils/consts');
 
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+require('./passport');
+
 // Middleware configuration
 module.exports = (app) => {
     // Because this is a server that will accept requests from outside and it will be hosted ona server with a `proxy`, express needs to know that it should trust that setting.
@@ -46,25 +51,43 @@ module.exports = (app) => {
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
 
-    // ℹ️ Middleware that adds a "req.session" information and later to check that you are who you say you are 😅
+    const store = MongoStore.create({
+        mongoUrl: MONGO_URI,
+        collection: 'sessions',
+    });
+
     app.use(
         session({
-            secret: process.env.SESSION_SECRET || 'super hyper secret key',
+            secret: 'javascipt is fun',
             resave: false,
+            store: store,
             saveUninitialized: false,
-            store: MongoStore.create({
-                mongoUrl: MONGO_URI,
-            }),
-            cookie: {
-                maxAge: 1000 * 60 * 60 * 24 * 365,
-                sameSite: 'none',
-                secure: process.env.NODE_ENV === 'production',
-            },
+            cookie: { maxAge: 1000 * 60 * 60 * 24 * 365 * 10 },
         })
     );
 
-    app.use((req, res, next) => {
-        req.user = req.session.user || null;
-        next();
-    });
+    // ℹ️ Middleware that adds a "req.session" information and later to check that you are who you say you are 😅
+    // app.use(
+    //     session({
+    //         secret: process.env.SESSION_SECRET || 'super hyper secret key',
+    //         resave: false,
+    //         saveUninitialized: false,
+    //         store: MongoStore.create({
+    //             mongoUrl: MONGO_URI,
+    //         }),
+    //         cookie: {
+    //             maxAge: 1000 * 60 * 60 * 24 * 365,
+    //             sameSite: 'none',
+    //             secure: process.env.NODE_ENV === 'production',
+    //         },
+    //     })
+    // );
+
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    // app.use((req, res, next) => {
+    //     req.user = req.session.user || null;
+    //     next();
+    // });
 };

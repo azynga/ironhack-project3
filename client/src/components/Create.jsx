@@ -8,7 +8,7 @@ const Create = () => {
                 <label htmlFor='title' className='visually-hidden'>
                     Title
                 </label>
-                <input type='text' id='title' placeholder='Title' />
+                <input type='text' id='title' placeholder='Title' autoFocus />
 
                 <label htmlFor='description' className='visually-hidden'>
                     Tags

@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import { SearchContext } from '../App';
+import LoadingIcon from './LoadingIcon';
 
-const LoadButton = () => {
-    const { searchParams, setSearchParams } = useContext(SearchContext);
+const LoadButton = ({ disabled }) => {
+    const { searchParams, setSearchParams, isLoading } =
+        useContext(SearchContext);
 
     return (
         <button
@@ -13,8 +15,17 @@ const LoadButton = () => {
                 };
                 setSearchParams(newSearchParams);
             }}
+            disabled={disabled}
         >
-            Load more
+            {disabled ? (
+                isLoading ? (
+                    <LoadingIcon />
+                ) : (
+                    'No more results'
+                )
+            ) : (
+                'Load more'
+            )}
         </button>
     );
 };

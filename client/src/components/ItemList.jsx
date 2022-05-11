@@ -14,7 +14,7 @@ const ItemList = ({ items }) => {
     return (
         <div className='item-list col'>
             {itemList}
-            {endOfResults ? '' : <LoadButton items={items} />}
+            <LoadButton disabled={endOfResults} />
         </div>
     );
 };
