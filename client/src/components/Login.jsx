@@ -26,28 +26,29 @@ const Login = () => {
     };
 
     return (
-        <div className='login'>
+        <div className='auth-form col'>
+            <h2>Login</h2>
             <form className='col' onSubmit={handleLogin}>
-                <label htmlFor='username' className='visually-hidden'>
+                <label htmlFor='login-username' className='visually-hidden'>
                     Username
                 </label>
                 <input
                     type='text'
                     name='username'
-                    id='username'
+                    id='login-username'
                     placeholder='Username'
                     autoComplete='off'
                     autoFocus
                     onChange={(event) => setUsername(event.target.value)}
                 />
 
-                <label htmlFor='password' className='visually-hidden'>
+                <label htmlFor='login-password' className='visually-hidden'>
                     Password
                 </label>
                 <input
                     type='password'
                     name='password'
-                    id='password'
+                    id='login-password'
                     placeholder='Password'
                     onChange={(event) => setPassword(event.target.value)}
                 />

@@ -9,8 +9,7 @@ import SideBar from './components/SideBar';
 import Browse from './components/Browse';
 import Create from './components/Create';
 import NoMatch from './components/NoMatch';
-import Signup from './components/Signup';
-import Login from './components/Login';
+import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 export const SearchContext = createContext();
@@ -86,15 +85,27 @@ const App = () => {
                                 element={<Browse items={items} />}
                             />
                             <Route
-                                path='/create'
+                                path='/login'
                                 element={
-                                    <ProtectedRoute>
-                                        <Create />
-                                    </ProtectedRoute>
+                                    loggedInUser ? (
+                                        <Navigate to='/browse' />
+                                    ) : (
+                                        <LoginPage />
+                                    )
                                 }
                             />
-                            <Route path='/signup' element={<Signup />} />
-                            <Route path='/login' element={<Login />} />
+
+                            <Route element={<ProtectedRoute />}>
+                                <Route path='/create' element={<Create />} />
+                                <Route
+                                    path='/profile'
+                                    element={<h2>Profile</h2>}
+                                />
+                                <Route
+                                    path='/messages'
+                                    element={<h2>Messages</h2>}
+                                />
+                            </Route>
                             <Route path='*' element={<NoMatch />} />
                         </Routes>
                     </main>

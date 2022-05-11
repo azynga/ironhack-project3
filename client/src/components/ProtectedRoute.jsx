@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import { UserContext } from '../App';
 
@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
     if (!loggedInUser) {
         return <Navigate to='/' />;
     } else {
-        return <>{children}</>;
+        return children ? children : <Outlet />;
     }
 };
 
