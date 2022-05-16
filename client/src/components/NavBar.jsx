@@ -3,13 +3,17 @@ import { NavLink } from 'react-router-dom';
 
 import { UserContext } from '../App';
 import { logout } from '../services/auth-service';
+import LoadingIcon from './LoadingIcon';
 
 const NavBar = () => {
-    const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+    const { loadingUser, loggedInUser, setLoggedInUser, notification } =
+        useContext(UserContext);
     // console.log(loggedInUser);
     return (
         <nav className='nav row'>
-            {loggedInUser ? (
+            {loadingUser ? (
+                <LoadingIcon />
+            ) : loggedInUser ? (
                 <>
                     <NavLink to='/create'>
                         <i
@@ -27,7 +31,10 @@ const NavBar = () => {
                             aria-label='Profile'
                         ></i>
                     </NavLink>
-                    <NavLink to='/messages'>
+                    <NavLink
+                        to='/messages'
+                        className={notification ? 'notify' : ''}
+                    >
                         <i
                             title='Messages'
                             className='bi bi-chat-left'

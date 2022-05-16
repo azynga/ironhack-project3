@@ -1,3 +1,9 @@
+require('dotenv').config();
+const cloudinary = require('cloudinary').v2;
+const uploader = require('../config/cloudinary');
+// console.log('CLOUD NAME: ', cloudinary.config().cloud_name);
+// console.log(cloudinary);
+
 const router = require('express').Router();
 const isLoggedIn = require('../middleware/isLoggedIn');
 const Item = require('../models/Item.model');
@@ -73,27 +79,27 @@ router.get('/:id', (req, res) => {
         });
 });
 
-router.post(
-    '/',
-    /*isLoggedIn,*/ (req, res) => {
-        Item.create(req.body)
-            .then((item) => {
-                return User.findByIdAndUpdate(
-                    item.owner,
-                    {
-                        $push: { itemsForSale: item._id },
-                    },
-                    { new: true }
-                ).populate('itemsForSale');
-            })
-            .then((updatedUser) => {
-                res.json(updatedUser);
-            })
-            .catch((error) => {
-                res.json(error);
+router.post('/', (req, res) => {
+    Item.create({ ...req.body })
+        .then((item) => {
+            User.findByIdAndUpdate(
+                item.owner,
+                {
+                    $push: { itemsForSale: item._id },
+                },
+                { new: true }
+            ).then(() => {
+                console.log('Item added to user');
             });
-    }
-);
+            return item;
+        })
+        .then((item) => {
+            res.json(item);
+        })
+        .catch((error) => {
+            res.json(error);
+        });
+});
 
 router.put('/:id', (req, res) => {
     const { id } = req.params;
@@ -125,6 +131,11 @@ router.delete('/:id', (req, res) => {
         .catch((error) => {
             res.json(error);
         });
+});
+
+router.post('/images', uploader.any('images'), (req, res) => {
+    const imageUrls = req.files.map((file) => file.path);
+    res.json(imageUrls);
 });
 
 module.exports = router;

@@ -1,40 +1,87 @@
 import { useState, useEffect, createContext } from 'react';
 import { Routes, Route, useSearchParams, Navigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 
 import './App.scss';
 import { getItems } from './services/item-service';
 import { loggedin } from './services/auth-service';
+import { saveNotification } from './services/user-service';
 import Header from './components/Header';
 import SideBar from './components/SideBar';
 import Browse from './components/Browse';
+import ItemDetails from './components/ItemDetails';
 import Create from './components/Create';
 import NoMatch from './components/NoMatch';
 import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import ChatList from './components/ChatList';
+import Chat from './components/Chat';
+import Profile from './components/Profile';
 
 export const SearchContext = createContext();
 export const UserContext = createContext();
 
 const App = () => {
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const [loadingUser, setLoadingUser] = useState(true);
+    const [notification, setNotification] = useState(false);
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentSocket, setCurrentSocket] = useState(null);
+
     const [searchParams, setSearchParams] = useSearchParams({
         sort: 'date_desc',
         limit: 10,
     });
 
-    useEffect(() => console.log(loggedInUser));
+    // useEffect(() => {
+    //     console.log(currentSocket);
+    // });
 
     useEffect(() => {
+        console.log(loggedInUser);
+        if (loggedInUser) {
+            saveNotification(loggedInUser._id, notification).then(
+                (response) => {
+                    console.log('saved? ', response);
+                }
+            );
+        }
+    }, [notification]);
+
+    useEffect(() => {
+        const socket = io('http://localhost:5005', {
+            withCredentials: true,
+        });
+
+        socket.on('connect', () => {
+            setCurrentSocket(socket);
+        });
+
+        socket.on('notify', () => {
+            console.log('notification');
+            setNotification(true);
+        });
+
         loggedin()
             .then((response) => {
-                // console.log(response);
-                setLoggedInUser(response.data);
+                if (response.data._id) {
+                    const user = response.data;
+                    setLoggedInUser(user);
+                    setNotification(user.unreadMessages);
+                    socket.emit('join', user._id);
+                }
             })
             .catch((error) => {
                 console.log(error);
+            })
+            .finally(() => {
+                setLoadingUser(false);
             });
+
+        return () => {
+            socket.disconnect();
+        };
     }, []);
 
     useEffect(() => {
@@ -60,7 +107,16 @@ const App = () => {
 
     return (
         <div className='container'>
-            <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+            <UserContext.Provider
+                value={{
+                    loadingUser,
+                    loggedInUser,
+                    setLoggedInUser,
+                    currentSocket,
+                    notification,
+                    setNotification,
+                }}
+            >
                 <SearchContext.Provider
                     value={{
                         isLoading,
@@ -85,6 +141,10 @@ const App = () => {
                                 element={<Browse items={items} />}
                             />
                             <Route
+                                path='/items/:itemId'
+                                element={<ItemDetails items={items} />}
+                            />
+                            <Route
                                 path='/login'
                                 element={
                                     loggedInUser ? (
@@ -99,11 +159,15 @@ const App = () => {
                                 <Route path='/create' element={<Create />} />
                                 <Route
                                     path='/profile'
-                                    element={<h2>Profile</h2>}
+                                    element={<Profile user={loggedInUser} />}
                                 />
                                 <Route
                                     path='/messages'
-                                    element={<h2>Messages</h2>}
+                                    element={<ChatList />}
+                                />
+                                <Route
+                                    path='/messages/:chatId'
+                                    element={<Chat />}
                                 />
                             </Route>
                             <Route path='*' element={<NoMatch />} />

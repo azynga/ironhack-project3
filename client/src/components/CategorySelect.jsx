@@ -9,17 +9,20 @@ const categories = [
     'Other',
 ];
 
-const CategorySelect = () => {
-    const radioButtons = categories.map((category) => {
+const CategorySelect = ({ category, setCategory }) => {
+    const radioButtons = categories.map((categoryOption) => {
         return (
-            <label key={category}>
+            <label key={categoryOption}>
                 <input
                     type='radio'
                     name='category'
-                    id={category.toLowerCase()}
-                    value={category}
+                    id={categoryOption.toLowerCase()}
+                    required
+                    onChange={(event) => setCategory(event.target.value)}
+                    value={categoryOption}
+                    checked={categoryOption === category ? 'checked' : ''}
                 />
-                {category}
+                {categoryOption}
             </label>
         );
     });

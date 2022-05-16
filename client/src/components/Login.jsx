@@ -8,15 +8,16 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
-    const { setLoggedInUser } = useContext(UserContext);
+    const { setLoggedInUser, setNotification } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLogin = (event) => {
         event.preventDefault();
         login(username, password)
             .then((response) => {
-                console.log(response);
-                setLoggedInUser(response.data);
+                const user = response.data;
+                setLoggedInUser(user);
+                setNotification(user.unreadMessages);
                 navigate('/');
             })
             .catch((error) => {

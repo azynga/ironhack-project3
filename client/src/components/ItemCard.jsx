@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Item = ({ item }) => {
+const ItemCard = ({ item }) => {
     return (
         <div className='item'>
             <div className='item-text'>
@@ -13,6 +14,7 @@ const Item = ({ item }) => {
                     <b>Price: </b>
                     {item.price}€
                 </p>
+                <Link to={'/items/' + item._id}>Details</Link>
             </div>
             <div className='item-image'>
                 <img className='item-image' src={item.images[0]} alt='' />
@@ -21,4 +23,4 @@ const Item = ({ item }) => {
     );
 };
 
-export default Item;
+export default ItemCard;
