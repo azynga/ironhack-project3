@@ -28,7 +28,7 @@ const CategorySelect = ({ category, setCategory }) => {
     });
 
     return (
-        <fieldset className='col' style={{ color: 'white' }}>
+        <fieldset className='col'>
             <legend>Select a category</legend>
             {radioButtons}
         </fieldset>

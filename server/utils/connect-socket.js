@@ -23,7 +23,7 @@ const connectSocket = (server) => {
             const { recipientId, senderId, chatId } = message;
             // delete message.chatId;
             socket.to(recipientId).emit('message', message);
-            socket.to(recipientId).emit('notify');
+            io.in(recipientId).in(senderId).emit('notify');
             // Chat.findByIdAndUpdate(chatId, {
             //     $push: {
             //         messages: {

@@ -7,8 +7,8 @@ import { getItems } from './services/item-service';
 import { loggedin } from './services/auth-service';
 import { saveNotification } from './services/user-service';
 import Header from './components/Header';
-import SideBar from './components/SideBar';
 import Browse from './components/Browse';
+import SearchSettings from './components/SearchSettings';
 import ItemDetails from './components/ItemDetails';
 import Create from './components/Create';
 import NoMatch from './components/NoMatch';
@@ -16,7 +16,10 @@ import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ChatList from './components/ChatList';
 import Chat from './components/Chat';
+import NavigateToSelectedChat from './components/NavigateToSelectedChat';
 import Profile from './components/Profile';
+import ProfileNav from './components/ProfileNav';
+import AccountSettings from './components/AccountSettings';
 
 export const SearchContext = createContext();
 export const UserContext = createContext();
@@ -32,6 +35,9 @@ const App = () => {
     const [searchParams, setSearchParams] = useSearchParams({
         sort: 'date_desc',
         limit: 10,
+        distance: 15,
+        long: 13.3888599,
+        lat: 52.5170365,
     });
 
     // useEffect(() => {
@@ -68,6 +74,12 @@ const App = () => {
                 if (response.data._id) {
                     const user = response.data;
                     setLoggedInUser(user);
+                    const { coordinates } = user.location.geometry;
+                    setSearchParams({
+                        ...Object.fromEntries(searchParams),
+                        long: coordinates[0],
+                        lat: coordinates[1],
+                    });
                     setNotification(user.unreadMessages);
                     socket.emit('join', user._id);
                 }
@@ -89,6 +101,7 @@ const App = () => {
         getItems(searchParams.toString())
             .then((response) => {
                 if (response.data.constructor !== Array) {
+                    console.error(response);
                     throw new Error(
                         'Received wrong data type from the server. Expected Array, but got ' +
                             response.data.constructor.name
@@ -98,7 +111,7 @@ const App = () => {
             })
             .catch((error) => {
                 setItems([]);
-                console.log(error);
+                console.error(error);
             })
             .finally(() => {
                 setIsLoading(false);
@@ -127,7 +140,34 @@ const App = () => {
                 >
                     <Header />
 
-                    <SideBar />
+                    {/* <SideBar /> */}
+                    <aside className='sidebar col'>
+                        <Routes>
+                            <Route
+                                path='/browse'
+                                element={<SearchSettings />}
+                            />
+                            <Route path='/items/:itemId' element={<></>} />
+                            <Route path='/login' element={<></>} />
+
+                            <Route element={<ProtectedRoute />}>
+                                <Route path='/create' element={<></>} />
+                                <Route
+                                    path='/profile/*'
+                                    element={<ProfileNav />}
+                                />
+                                <Route
+                                    path='/messages'
+                                    element={<ChatList />}
+                                />
+                                <Route
+                                    path='/messages/:chatId'
+                                    element={<ChatList />}
+                                />
+                            </Route>
+                            <Route path='*' element={<></>} />
+                        </Routes>
+                    </aside>
                     <main className='main-content'>
                         <Routes>
                             <Route
@@ -162,8 +202,12 @@ const App = () => {
                                     element={<Profile user={loggedInUser} />}
                                 />
                                 <Route
+                                    path='/profile/settings'
+                                    element={<AccountSettings />}
+                                />
+                                <Route
                                     path='/messages'
-                                    element={<ChatList />}
+                                    element={<NavigateToSelectedChat />}
                                 />
                                 <Route
                                     path='/messages/:chatId'

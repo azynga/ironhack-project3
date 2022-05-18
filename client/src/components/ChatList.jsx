@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { getAllChatsOfUser } from '../services/chat-service';
 import { UserContext } from '../App';
@@ -6,8 +7,14 @@ import ChatPreview from './ChatPreview';
 import EnterChat from './EnterChat';
 
 const ChatList = () => {
-    const { setNotification, loggedInUser } = useContext(UserContext);
+    const { chatId: selectedChat } = useParams();
+    const {
+        setNotification,
+        loggedInUser,
+        currentSocket: socket,
+    } = useContext(UserContext);
     const [chats, setChats] = useState(null);
+    const [loadingNewMessages, setLoadingNewMessages] = useState(false);
     const userId = loggedInUser._id;
 
     useEffect(() => {
@@ -15,9 +22,17 @@ const ChatList = () => {
     });
 
     useEffect(() => {
+        if (!socket) {
+            return;
+        }
+        socket.on('notify', () => {
+            setLoadingNewMessages(true);
+        });
+    }, [socket]);
+
+    useEffect(() => {
         getAllChatsOfUser(userId)
             .then((response) => {
-                console.log('response ', response);
                 const chats = response.data.map((chat) => {
                     const otherUser = chat.participants.find(
                         (user) => user._id !== userId
@@ -29,12 +44,20 @@ const ChatList = () => {
             })
             .catch((error) => {
                 console.error(error);
+            })
+            .finally(() => {
+                setLoadingNewMessages(false);
             });
-    }, [userId]);
+    }, [userId, loadingNewMessages]);
 
-    const chatList = chats?.map((chat) => {
+    const chatList = chats?.map((chat, index) => {
         return (
-            <EnterChat key={chat._id} otherUserId={chat.otherUser._id}>
+            <EnterChat
+                even={index % 2 === 0}
+                selected={selectedChat === chat._id}
+                key={chat._id}
+                otherUserId={chat.otherUser._id}
+            >
                 <ChatPreview chat={chat} />
             </EnterChat>
         );

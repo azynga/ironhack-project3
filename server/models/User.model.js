@@ -13,13 +13,23 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
-        // email: {
-        //     type: String,
-        //     required: true,
-        //     unique: true,
-        //     trim: true,
-        //     lowercase: true,
-        // },
+        location: {
+            address: {
+                type: Schema.Types.Mixed,
+                required: true,
+            },
+            geometry: {
+                type: {
+                    type: String,
+                    enum: ['Point'],
+                    required: true,
+                },
+                coordinates: {
+                    type: [Number],
+                    required: true,
+                },
+            },
+        },
         itemsForSale: {
             type: [Schema.Types.ObjectId],
             ref: 'Item',
@@ -28,16 +38,18 @@ const userSchema = new Schema(
             type: [Schema.Types.ObjectId],
             ref: 'Item',
         },
-        contacts: {
-            type: [Schema.Types.Mixed],
+        storageData: {
+            type: Schema.Types.Mixed,
+            default: null,
+        },
+        unreadMessages: {
+            type: Boolean,
+            default: false,
         },
         // friends: {
         //     type: [Schema.Types.ObjectId],
         //     ref: 'User',
         // },
-        unreadMessages: {
-            type: Boolean,
-        },
     },
     {
         timestamps: true,

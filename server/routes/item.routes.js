@@ -1,8 +1,7 @@
 require('dotenv').config();
+const ObjectId = require('mongoose').Types.ObjectId;
 const cloudinary = require('cloudinary').v2;
 const uploader = require('../config/cloudinary');
-// console.log('CLOUD NAME: ', cloudinary.config().cloud_name);
-// console.log(cloudinary);
 
 const router = require('express').Router();
 const isLoggedIn = require('../middleware/isLoggedIn');
@@ -11,7 +10,17 @@ const User = require('../models/User.model');
 
 router.get('/', (req, res) => {
     const pipeline = (query) => {
-        const { search, category, location, skip, sort, limit } = query;
+        const {
+            search,
+            category,
+            location,
+            skip,
+            sort,
+            limit,
+            distance,
+            long,
+            lat,
+        } = query;
         const sold = !!query.sold;
         const match = {
             ...(category && { category }),
@@ -27,12 +36,22 @@ router.get('/', (req, res) => {
             date_desc: { updatedAt: -1 },
         };
 
-        // const sortStage = {...sortOptions[sort], _id: 1}
-
         if (search) {
             return [
                 { $match: { $text: { $search: search } } },
                 { $match: match },
+                {
+                    $match: {
+                        'location.geometry.coordinates': {
+                            $geoWithin: {
+                                $centerSphere: [
+                                    [Number(long), Number(lat)],
+                                    Number(distance) / 6378.15214,
+                                ],
+                            },
+                        },
+                    },
+                },
                 { $addFields: { score: { $meta: 'textScore' } } },
                 {
                     $sort: {
@@ -46,6 +65,18 @@ router.get('/', (req, res) => {
         } else {
             return [
                 { $match: match },
+                {
+                    $match: {
+                        'location.geometry.coordinates': {
+                            $geoWithin: {
+                                $centerSphere: [
+                                    [Number(long), Number(lat)],
+                                    Number(distance) / 6378.15214,
+                                ],
+                            },
+                        },
+                    },
+                },
                 {
                     $sort: {
                         ...(sort ? sortOptions[sort] : sortOptions.date_desc),
@@ -69,10 +100,30 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     const { id } = req.params;
-    Item.findById(id)
-        .populate('owner')
-        .then((item) => {
-            res.json(item);
+
+    Item.aggregate([
+        {
+            $geoNear: {
+                query: { _id: ObjectId(id) },
+                near: {
+                    type: 'Point',
+                    coordinates: [13.38445327743614, 52.49386885],
+                },
+                distanceField: 'distance',
+            },
+        },
+    ])
+        .then((result) => {
+            const item = result[0];
+            if (!item) {
+                throw new Error('Item not found');
+            }
+            User.populate(item, { path: 'owner' }).then((populatedItem) => {
+                const { username, _id, itemsForSale } = populatedItem.owner;
+
+                populatedItem.owner = { username, _id, itemsForSale };
+                res.json(populatedItem);
+            });
         })
         .catch((error) => {
             res.json(error);

@@ -8,8 +8,6 @@ const ChatPreviewText = ({ message }) => {
     const userId = loggedInUser._id;
     const MAX_MESSAGE_LENGTH = 60;
 
-    console.log('MESSAGE: ', message);
-
     return (
         <p>
             <TimeStamp timestamp={message.timestamp} />

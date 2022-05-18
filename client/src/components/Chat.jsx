@@ -60,12 +60,13 @@ const Chat = () => {
 
                 setOtherUser(otherParticipant);
                 setMessages(chat.messages.reverse());
+                localStorage.setItem('selectedChat', JSON.stringify(chatId));
             })
             .catch((error) => {
                 console.error(error);
                 navigate('/messages');
             });
-    }, []);
+    }, [chatId]);
 
     useEffect(() => {
         if (!socket) {

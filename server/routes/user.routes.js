@@ -14,6 +14,18 @@ router.get('/:userId/items', (req, res) => {
         });
 });
 
+router.put('/:userId', (req, res) => {
+    const { userId } = req.params;
+
+    User.findByIdAndUpdate(userId, req.body, { new: true })
+        .then((user) => {
+            res.json(user);
+        })
+        .catch((error) => {
+            res.status(500).json(error);
+        });
+});
+
 router.put('/notify/:userId', (req, res) => {
     console.log(req.body);
     const { notify } = req.body;

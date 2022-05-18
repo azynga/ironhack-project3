@@ -3,12 +3,33 @@ import { NavLink } from 'react-router-dom';
 
 import { UserContext } from '../App';
 import { logout } from '../services/auth-service';
+import { updateUser } from '../services/user-service';
 import LoadingIcon from './LoadingIcon';
 
 const NavBar = () => {
     const { loadingUser, loggedInUser, setLoggedInUser, notification } =
         useContext(UserContext);
     // console.log(loggedInUser);
+
+    const handleLogout = () => {
+        const storageData = {
+            createFormData: JSON.parse(localStorage.getItem('createFormData')),
+            selectedChat: JSON.parse(localStorage.getItem('selectedChat')),
+        };
+
+        updateUser(loggedInUser._id, { storageData })
+            .then(() => {
+                localStorage.clear();
+                return logout();
+            })
+            .then(() => {
+                setLoggedInUser(null);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
     return (
         <nav className='nav row'>
             {loadingUser ? (
@@ -53,14 +74,7 @@ const NavBar = () => {
                         Logout
                     </button> */}
                     {/* <NavLink to='/logout'> */}
-                    <button
-                        onClick={() => {
-                            logout().then((response) => {
-                                console.log(response);
-                                setLoggedInUser(null);
-                            });
-                        }}
-                    >
+                    <button onClick={handleLogout}>
                         <i
                             title='Logout'
                             className='bi bi-box-arrow-right'

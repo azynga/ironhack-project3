@@ -50,8 +50,14 @@ const ItemDetails = () => {
             <p>Description: {item.description}</p>
             <p>Tags: {item.tags}</p>
             <p>Price: {item.price}€</p>
+            <p>
+                {item.distance < 1000
+                    ? '< 1'
+                    : `~ ${Math.round(item.distance / 1000)}`}
+                km away
+            </p>
 
-            {isOwn ? (
+            {isOwn || !loggedInUser ? (
                 ''
             ) : (
                 <EnterChat otherUserId={item.owner._id}>

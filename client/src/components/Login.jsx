@@ -16,8 +16,20 @@ const Login = () => {
         login(username, password)
             .then((response) => {
                 const user = response.data;
+                const createFormData = user.storageData?.createFormData;
+                const selectedChat = user.storageData?.selectedChat;
+
                 setLoggedInUser(user);
                 setNotification(user.unreadMessages);
+                localStorage.setItem(
+                    'createFormData',
+                    JSON.stringify(createFormData)
+                );
+                selectedChat &&
+                    localStorage.setItem(
+                        'selectedChat',
+                        JSON.stringify(selectedChat)
+                    );
                 navigate('/');
             })
             .catch((error) => {
