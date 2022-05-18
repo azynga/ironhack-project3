@@ -31,7 +31,6 @@ const App = () => {
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentSocket, setCurrentSocket] = useState(null);
-
     const [searchParams, setSearchParams] = useSearchParams({
         sort: 'date_desc',
         limit: 10,
@@ -41,17 +40,18 @@ const App = () => {
     });
 
     // useEffect(() => {
-    //     console.log(currentSocket);
+    //     console.log('search params: ', searchParams.toString());
     // });
 
     useEffect(() => {
-        console.log(loggedInUser);
         if (loggedInUser) {
-            saveNotification(loggedInUser._id, notification).then(
-                (response) => {
-                    console.log('saved? ', response);
-                }
-            );
+            saveNotification(loggedInUser._id, notification)
+                .then(() => {
+                    console.log('notification saved');
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         }
     }, [notification]);
 
@@ -65,7 +65,6 @@ const App = () => {
         });
 
         socket.on('notify', () => {
-            console.log('notification');
             setNotification(true);
         });
 
@@ -75,17 +74,19 @@ const App = () => {
                     const user = response.data;
                     setLoggedInUser(user);
                     const { coordinates } = user.location.geometry;
-                    setSearchParams({
-                        ...Object.fromEntries(searchParams),
-                        long: coordinates[0],
-                        lat: coordinates[1],
-                    });
+                    if (!searchParams.has('long') || !searchParams.has('lat')) {
+                        setSearchParams({
+                            ...Object.fromEntries(searchParams),
+                            long: coordinates[0],
+                            lat: coordinates[1],
+                        });
+                    }
                     setNotification(user.unreadMessages);
                     socket.emit('join', user._id);
                 }
             })
             .catch((error) => {
-                console.log(error);
+                console.error(error);
             })
             .finally(() => {
                 setLoadingUser(false);
@@ -119,7 +120,7 @@ const App = () => {
     }, [searchParams]);
 
     return (
-        <div className='container'>
+        <div className='app-container'>
             <UserContext.Provider
                 value={{
                     loadingUser,
@@ -172,9 +173,7 @@ const App = () => {
                         <Routes>
                             <Route
                                 path='/'
-                                element={
-                                    <Navigate to='/browse' replace={true} />
-                                }
+                                element={<Navigate to={'/browse'} />}
                             />
                             <Route
                                 path='/browse'
@@ -188,7 +187,15 @@ const App = () => {
                                 path='/login'
                                 element={
                                     loggedInUser ? (
-                                        <Navigate to='/browse' />
+                                        <Navigate
+                                            to='/browse'
+                                            state={{
+                                                test: 'blabla',
+                                                // ...Object.fromEntries(
+                                                //     searchParams
+                                                // ),
+                                            }}
+                                        />
                                     ) : (
                                         <LoginPage />
                                     )

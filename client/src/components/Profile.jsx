@@ -8,7 +8,6 @@ const Profile = ({ user }) => {
     useEffect(() => {
         getAllItemsOfUser(user._id)
             .then((response) => {
-                console.log(response.data);
                 setItems(response.data);
             })
             .catch((error) => console.error(error));

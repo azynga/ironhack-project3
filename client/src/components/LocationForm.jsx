@@ -20,7 +20,6 @@ const LocationForm = ({ location, setLocation }) => {
             country: 'deutschland',
         })
             .then((response) => {
-                console.log(response);
                 const result = response.data.features[0];
                 const addressData =
                     response.data.features[0].properties.address;

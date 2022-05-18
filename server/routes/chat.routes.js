@@ -64,31 +64,6 @@ router.get('/:id', (req, res) => {
         });
 });
 
-// router.post('/', (req, res) => {
-//     const { participants } = req.body;
-//     Chat.create({ participants })
-//         .then((chat) => {
-//             console.log('chat created');
-//             chat.participants.map((participantId, _, participants) => {
-//                 const otherParticipantId = participants.find(
-//                     (userId) => userId !== participantId
-//                 );
-//                 const contact = {
-//                     otherUserId: otherParticipantId,
-//                     chatId: chat._id,
-//                 };
-//                 User.findByIdAndUpdate(participantId, {
-//                     $push: { contacts: contact },
-//                 }).then((user) => console.log('contact added to user'));
-//             });
-//             return chat._id;
-//         })
-//         .then((chatId) => res.json(chatId))
-//         .catch((error) => {
-//             res.json(error);
-//         });
-// });
-
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const message = req.body;

@@ -1,15 +1,20 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { UserContext } from '../App';
+import { UserContext, SearchContext } from '../App';
 import { logout } from '../services/auth-service';
 import { updateUser } from '../services/user-service';
 import LoadingIcon from './LoadingIcon';
 
 const NavBar = () => {
-    const { loadingUser, loggedInUser, setLoggedInUser, notification } =
-        useContext(UserContext);
-    // console.log(loggedInUser);
+    const {
+        loadingUser,
+        loggedInUser,
+        setLoggedInUser,
+        notification,
+        currentSocket: socket,
+    } = useContext(UserContext);
+    const { setSearchParams } = useContext(SearchContext);
 
     const handleLogout = () => {
         const storageData = {
@@ -20,9 +25,12 @@ const NavBar = () => {
         updateUser(loggedInUser._id, { storageData })
             .then(() => {
                 localStorage.clear();
+                sessionStorage.clear();
+                setSearchParams({});
                 return logout();
             })
             .then(() => {
+                socket.emit('leave', loggedInUser._id);
                 setLoggedInUser(null);
             })
             .catch((error) => {
@@ -63,17 +71,7 @@ const NavBar = () => {
                             aria-label='Messages'
                         ></i>
                     </NavLink>
-                    {/* <button
-                        onClick={() => {
-                            logout().then((response) => {
-                                console.log(response);
-                                setLoggedInUser(null);
-                            });
-                        }}
-                    >
-                        Logout
-                    </button> */}
-                    {/* <NavLink to='/logout'> */}
+
                     <button onClick={handleLogout}>
                         <i
                             title='Logout'

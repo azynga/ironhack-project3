@@ -1,3 +1,5 @@
+@use './components/styles/variables' as v;
+
 @import url('http://fonts.cdnfonts.com/css/montserrat');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css');
 
@@ -7,7 +9,28 @@
 }
 
 body {
-    background-color: hsl(275, 100%, 13%);
+    background-color: v.$purple-dark;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
 }
 
 .visually-hidden {
@@ -19,42 +42,20 @@ body {
     overflow: hidden;
 }
 
-.container {
+.app-container {
+    width: 100vw;
     height: 100vh;
     display: grid;
     grid-template-columns: 200px 1fr 250px;
     grid-template-rows: 70px 1fr;
-    gap: 5px 0px;
-    grid-auto-flow: row;
     grid-template-areas:
         'brand search nav'
         'sidebar main main';
 }
 
-// .main-container {
-//     // display: grid;
-//     // grid-template-columns: 1fr 5fr 2fr;
-
-//     // grid-template-rows: 0.2fr;
-//     // gap: 0px 0px;
-//     // grid-template-areas: 'sidebar main main';
-//     // column-gap: 21px;
-//     position: relative;
-//     overflow: hidden;
-//     width: 100vw;
-//     height: 100%;
-//     // padding: 0 17px;
-// }
-
 .main-content {
-    > * {
-        padding: 20px;
-    }
-    // border-left: solid 1px white;
     display: flex;
     justify-content: center;
-    // padding: 20px;
-    // padding-top: 15px;
     grid-area: main;
     overflow: scroll;
     height: 100%;
@@ -63,23 +64,14 @@ body {
 }
 
 .sidebar {
-    > * {
-        overflow: scroll;
-    }
-    grid-area: sidebar;
-    background-color: hsl(275, 90%, 15%);
+    // grid-area: sidebar;
+    // background-color: hsl(275, 90%, 13%);
     width: 100%;
     height: 100%;
     // padding: 20px;
     // padding-top: 15px;
     row-gap: 5px;
-    border-right: solid 1px hsl(275, 100%, 23%);
     transition: width 0.3s;
-}
-
-a {
-    text-decoration: none;
-    color: black;
 }
 
 .item-list {
@@ -127,7 +119,7 @@ a {
     right: -2px;
     transition: top 0.2s, left 0.2s, bottom 0.2s, right 0.2s;
 
-    background-color: hsl(275, 50%, 83%);
+    background-color: v.$purple-white;
 }
 
 .item:hover {
@@ -144,27 +136,9 @@ a {
     transition: top 0.2s, left 0.2s, bottom 0.2s, right 0.2s;
 }
 
-.row {
-    display: flex;
-    flex-direction: row;
-    // align-items: center;
-}
-
-.col {
-    display: flex;
-    flex-direction: column;
-    // align-items: center;
-}
-
-h1,
-h2,
-h3 {
-    margin: 0;
-}
-
 .brand {
     grid-area: brand;
-    background-color: hsl(45, 74%, 51%);
+    background-color: v.$orange;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -181,13 +155,13 @@ h3 {
         color: white;
         -webkit-text-fill-color: white;
         -webkit-text-stroke-width: 1px;
-        -webkit-text-stroke-color: hsl(275, 100%, 13%);
+        -webkit-text-stroke-color: v.$purple-dark;
         letter-spacing: -2px;
 
-        text-shadow: 1px 1px hsl(275, 100%, 13%), 1px 2px hsl(275, 100%, 13%),
-            2px 3px hsl(275, 100%, 13%), 2px 4px hsl(275, 100%, 13%),
-            3px 5px hsl(275, 100%, 13%), 3px 6px hsl(275, 100%, 13%),
-            4px 7px hsl(275, 100%, 13%), 4px 8px hsl(275, 100%, 13%);
+        text-shadow: 1px 1px v.$purple-dark, 1px 2px v.$purple-dark,
+            2px 3px v.$purple-dark, 2px 4px v.$purple-dark,
+            3px 5px v.$purple-dark, 3px 6px v.$purple-dark,
+            4px 7px v.$purple-dark, 4px 8px v.$purple-dark;
     }
 }
 
@@ -197,7 +171,7 @@ h3 {
 
 .nav {
     grid-area: nav;
-    background-color: hsl(45, 74%, 51%);
+    background-color: v.$orange;
 
     justify-content: center;
     align-items: center;
@@ -225,18 +199,18 @@ h3 {
 
     a:hover,
     button:hover {
-        background-color: hsl(45, 74%, 61%);
+        background-color: v.$orange-light;
         transition: background-color 0.3s;
     }
 
     a:active,
     button:active {
-        background-color: hsl(45, 74%, 81%);
+        background-color: v.$orange-lightest;
         transition: background-color 0.3s;
     }
 
     .active {
-        background-color: hsl(45, 74%, 81%) !important;
+        background-color: v.$orange-lightest !important;
     }
 
     .login {
@@ -247,7 +221,7 @@ h3 {
 
 .search-container {
     grid-area: search;
-    background-color: hsl(45, 74%, 51%);
+    background-color: v.$orange;
     position: relative;
     display: flex;
     align-items: center;
@@ -270,7 +244,7 @@ h3 {
     }
 
     input:focus {
-        background-color: hsl(45, 74%, 61%);
+        background-color: v.$orange-light;
     }
 
     input::placeholder {
@@ -399,7 +373,7 @@ h3 {
         // font-weight: bold;
         // box-shadow: 0px 0px 15px black;
         z-index: 1;
-        border: solid 5px hsl(45, 74%, 51%);
+        border: solid 5px v.$orange;
     }
 }
 

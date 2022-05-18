@@ -11,15 +11,16 @@ const ItemDetails = () => {
     const { loggedInUser, loadingUser } = useContext(UserContext);
 
     const [item, setItem] = useState(null);
-    const [isOwn, setIsOwn] = useState(null);
+    const [isOwn, setIsOwn] = useState(false);
     const [loadingItem, setLoadingItem] = useState(true);
     // const isOwn = item?.owner === loggedInUser?._id;
+
+    // useEffect(() => {}, [loggedInUser]);
 
     useEffect(() => {
         getOneItem(itemId)
             .then((response) => {
                 const item = response.data;
-                console.log('item', item);
                 if (!item?._id) {
                     throw new Error('Item not found');
                 }
@@ -57,8 +58,10 @@ const ItemDetails = () => {
                 km away
             </p>
 
-            {isOwn || !loggedInUser ? (
+            {loadingItem || loadingUser || !loggedInUser ? (
                 ''
+            ) : isOwn ? (
+                <button>Delete</button>
             ) : (
                 <EnterChat otherUserId={item.owner._id}>
                     Contact {item.owner.username}

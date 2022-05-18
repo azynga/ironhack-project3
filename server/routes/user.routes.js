@@ -27,14 +27,10 @@ router.put('/:userId', (req, res) => {
 });
 
 router.put('/notify/:userId', (req, res) => {
-    console.log(req.body);
     const { notify } = req.body;
     const { userId } = req.params;
-    console.log('notify', notify);
-    console.log('user: ', userId);
     User.findByIdAndUpdate(userId, { unreadMessages: notify }, { new: true })
         .then((user) => {
-            console.log(user);
             res.json({ message: 'Notification saved' });
         })
         .catch((error) => {

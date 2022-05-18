@@ -8,19 +8,21 @@ const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
-    const { setLoggedInUser } = useContext(UserContext);
+    const { setLoggedInUser, currentSocket: socket } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleSignup = (event) => {
         event.preventDefault();
         signup(username, password)
             .then((response) => {
-                console.log(response);
-                setLoggedInUser(response.data);
-                navigate('/');
+                const user = response.data;
+                setLoggedInUser(user);
+                socket.emit('join', user._id);
+
+                navigate('/browse');
             })
             .catch((error) => {
-                console.log(error);
+                console.error(error);
                 setErrorMessage(error.response.data.errorMessage);
             });
     };

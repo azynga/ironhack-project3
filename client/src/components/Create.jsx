@@ -65,9 +65,10 @@ const Create = () => {
     };
 
     useEffect(() => {
-        const formData = JSON.parse(localStorage.getItem('createFormData'));
-
-        if (formData) {
+        const savedFormData = JSON.parse(
+            localStorage.getItem('createFormData')
+        );
+        if (savedFormData) {
             const {
                 title,
                 imageUrls,
@@ -77,7 +78,7 @@ const Create = () => {
                 category,
                 draft,
                 location,
-            } = formData;
+            } = savedFormData;
 
             setTitle(title);
             setDescription(description);
@@ -86,9 +87,13 @@ const Create = () => {
             setPrice(price);
             setCategory(category);
             setDraft(draft);
-            setLocation(location);
+            if (location) {
+                setLocation(location);
+            } else if (loggedInUser) {
+                setLocation(loggedInUser.location);
+            }
         }
-    }, []);
+    }, [loggedInUser]);
 
     useEffect(() => {
         if (!initialRender.current) {

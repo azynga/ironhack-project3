@@ -9,15 +9,12 @@ const AccountSettings = () => {
     const [location, setLocation] = useState(loggedInUser?.location);
 
     const handleSaveLocation = () => {
-        console.log('location to be saved: ', location);
         updateUser(loggedInUser._id, { location })
             .then((response) => {
-                console.log('update response: ', response);
                 if (!response.data._id) {
                     throw new Error('Error updating user');
                 }
                 const updatedUser = response.data;
-                console.log(updatedUser);
                 setLoggedInUser(updatedUser);
             })
             .catch((error) => console.error(error));
@@ -25,7 +22,6 @@ const AccountSettings = () => {
 
     useEffect(() => {
         setLocation(loggedInUser?.location);
-        console.log(loggedInUser);
     }, [loggedInUser]);
 
     return (

@@ -32,7 +32,6 @@ const ImageDropzone = ({ imageUrls, setImageUrls }) => {
         setUploadingFiles(true);
         uploadImages(uploadData)
             .then((response) => {
-                console.log(response);
                 setImageUrls([...imageUrls, ...response.data]);
                 setUploadingFiles(false);
             })

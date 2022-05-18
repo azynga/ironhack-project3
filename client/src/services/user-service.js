@@ -5,7 +5,6 @@ const service = axios.create({
 });
 
 const saveNotification = (userId, notification) => {
-    console.log(notification);
     return service.put('/users/notify/' + userId, { notify: notification });
 };
 

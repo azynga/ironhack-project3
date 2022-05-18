@@ -12,10 +12,10 @@ const EnterChat = ({ otherUserId, children, selected, even }) => {
         getChatId(loggedInUser._id, otherUserId)
             .then((response) => {
                 const chatId = response.data;
-                navigate('/messages/' + chatId);
+                navigate('/messages/' + chatId, { replace: true });
             })
             .catch((error) => {
-                console.log(error);
+                console.error(error);
             });
     };
 

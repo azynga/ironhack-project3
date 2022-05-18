@@ -11,13 +11,28 @@ const SearchBar = () => {
     const currentPath = useLocation().pathname;
 
     useEffect(() => {
-        const lastSearch = searchParams.get('search');
-        if (lastSearch) {
-            setSearch(lastSearch);
+        // const lastSearch = JSON.parse(
+        //     sessionStorage.getItem('searchParams')
+        // ).search;
+
+        if (currentPath === '/browse') {
+            setSearch(
+                searchParams.get('search') ||
+                    JSON.parse(sessionStorage.getItem('searchParams'))
+                        ?.search ||
+                    searchParams.get('search') ||
+                    ''
+            );
         } else {
             setSearch('');
         }
-    }, [currentPath]);
+        // const lastSearch = searchParams.get('search');
+        // if (lastSearch) {
+        //     setSearch(lastSearch);
+        // } else {
+        //     setSearch('');
+        // }
+    }, [currentPath, searchParams]);
 
     const handleSearch = (event) => {
         event.preventDefault();
@@ -53,6 +68,7 @@ const SearchBar = () => {
                     placeholder='Search...'
                     autoComplete='off'
                     autoFocus
+                    onClick={(event) => event.target.select()}
                 />
             </form>
             {isLoading ? <LoadingIcon /> : ''}
