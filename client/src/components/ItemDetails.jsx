@@ -35,8 +35,15 @@ const ItemDetails = () => {
             });
     }, [itemId, loadingUser]);
 
-    const gallery = item?.images.map((image) => {
-        return <img key={Math.random().toString(36)} src={image} alt='' />;
+    const gallery = item?.images.map((image, index) => {
+        return (
+            <img
+                key={Math.random().toString(36)}
+                className={index === 0 ? 'first-image' : ''}
+                src={image}
+                alt=''
+            />
+        );
     });
 
     return loadingItem ? (
@@ -44,30 +51,40 @@ const ItemDetails = () => {
     ) : !item ? (
         'Item not found'
     ) : (
-        <div className='white'>
+        <main className='item-details main-fill'>
             <h2>{item.title}</h2>
-            <div className='item-images'>{gallery}</div>
-            <p>Category: {item.category}</p>
-            <p>Description: {item.description}</p>
-            <p>Tags: {item.tags}</p>
-            <p>Price: {item.price}€</p>
-            <p>
-                {item.distance < 1000
-                    ? '< 1'
-                    : `~ ${Math.round(item.distance / 1000)}`}
-                km away
-            </p>
+            <div className='item-details-container'>
+                <div className='item-images'>{gallery}</div>
+                <p>
+                    <b>Category:</b> {item.category}
+                </p>
+                <p>
+                    <b>Description:</b> {item.description}
+                </p>
+                <p>
+                    <b>Tags:</b> {item.tags}
+                </p>
+                <p>
+                    <b>Price:</b> {item.price}€
+                </p>
+                <p>
+                    {item.distance < 1000
+                        ? '< 1'
+                        : `~ ${Math.round(item.distance / 1000)}`}
+                    km away from {loggedInUser.location.address.addressLine}
+                </p>
 
-            {loadingItem || loadingUser || !loggedInUser ? (
-                ''
-            ) : isOwn ? (
-                <button>Delete</button>
-            ) : (
-                <EnterChat otherUserId={item.owner._id}>
-                    Contact {item.owner.username}
-                </EnterChat>
-            )}
-        </div>
+                {loadingItem || loadingUser || !loggedInUser ? (
+                    ''
+                ) : isOwn ? (
+                    <button>Delete</button>
+                ) : (
+                    <EnterChat otherUserId={item.owner._id}>
+                        Contact {item.owner.username}
+                    </EnterChat>
+                )}
+            </div>
+        </main>
     );
 };
 

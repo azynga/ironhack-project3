@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import './styles/chat-list.scss';
 import { getAllChatsOfUser } from '../services/chat-service';
 import { UserContext } from '../App';
 import ChatPreview from './ChatPreview';

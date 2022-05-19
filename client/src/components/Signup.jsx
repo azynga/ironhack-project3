@@ -40,7 +40,7 @@ const Signup = () => {
                     id='signup-username'
                     placeholder='Username'
                     autoComplete='off'
-                    // autoFocus
+                    maxLength={15}
                     onChange={(event) => setUsername(event.target.value)}
                 />
 

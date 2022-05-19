@@ -142,34 +142,27 @@ const App = () => {
                     <Header />
 
                     {/* <SideBar /> */}
-                    <aside className='sidebar col'>
-                        <Routes>
-                            <Route
-                                path='/browse'
-                                element={<SearchSettings />}
-                            />
-                            <Route path='/items/:itemId' element={<></>} />
-                            <Route path='/login' element={<></>} />
+                    <div className='main-content-container'>
+                        {/* <aside className='sidebar col'>
+                            <Routes>
+                                <Route
+                                    path='/browse'
+                                    element={<SearchSettings />}
+                                />
 
-                            <Route element={<ProtectedRoute />}>
-                                <Route path='/create' element={<></>} />
-                                <Route
-                                    path='/profile/*'
-                                    element={<ProfileNav />}
-                                />
-                                <Route
-                                    path='/messages'
-                                    element={<ChatList />}
-                                />
-                                <Route
-                                    path='/messages/:chatId'
-                                    element={<ChatList />}
-                                />
-                            </Route>
-                            <Route path='*' element={<></>} />
-                        </Routes>
-                    </aside>
-                    <main className='main-content'>
+                                <Route element={<ProtectedRoute />}>
+                                    <Route
+                                        path='/profile/*'
+                                        element={<ProfileNav />}
+                                    />
+                                    <Route
+                                        path='/messages/*'
+                                        element={<ChatList />}
+                                    />
+                                </Route>
+                                <Route path='*' element={<></>} />
+                            </Routes>
+                        </aside> */}
                         <Routes>
                             <Route
                                 path='/'
@@ -223,7 +216,7 @@ const App = () => {
                             </Route>
                             <Route path='*' element={<NoMatch />} />
                         </Routes>
-                    </main>
+                    </div>
                 </SearchContext.Provider>
             </UserContext.Provider>
         </div>

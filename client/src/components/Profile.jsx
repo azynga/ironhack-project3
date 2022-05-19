@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAllItemsOfUser } from '../services/user-service';
 import ItemCard from './ItemCard';
+import ProfileNav from './ProfileNav';
 
 const Profile = ({ user }) => {
     const [items, setItems] = useState(null);
@@ -18,10 +19,15 @@ const Profile = ({ user }) => {
     });
 
     return (
-        <div>
-            <h2>{user.username}</h2>
-            <div className='item-list'>{itemList}</div>
-        </div>
+        <>
+            <aside className='sidebar'>
+                <ProfileNav />
+            </aside>
+            <main className='profile'>
+                <h2>{user.username}</h2>
+                <div className='item-list col'>{itemList}</div>
+            </main>
+        </>
     );
 };
 

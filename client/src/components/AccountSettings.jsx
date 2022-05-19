@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../App';
 import { updateUser } from '../services/user-service';
 import LocationForm from './LocationForm';
+import ProfileNav from './ProfileNav';
 
 const AccountSettings = () => {
     const { loggedInUser, setLoggedInUser } = useContext(UserContext);
@@ -25,12 +26,17 @@ const AccountSettings = () => {
     }, [loggedInUser]);
 
     return (
-        <div className='account-settings'>
-            <h2>Account settings</h2>
-            <h3>Change your address: </h3>
-            <LocationForm location={location} setLocation={setLocation} />
-            <button onClick={handleSaveLocation}>Save</button>
-        </div>
+        <>
+            <aside>
+                <ProfileNav />
+            </aside>
+            <main className='account-settings'>
+                <h2>Account settings</h2>
+                <h3>Change your address: </h3>
+                <LocationForm location={location} setLocation={setLocation} />
+                <button onClick={handleSaveLocation}>Save</button>
+            </main>
+        </>
     );
 };
 

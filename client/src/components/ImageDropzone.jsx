@@ -7,9 +7,10 @@ const ImageDropzone = ({ imageUrls, setImageUrls }) => {
     const defaultStyle = {
         border: 'dotted 4px white',
         width: '100%',
-        height: 300,
+        height: 200,
         position: 'relative',
     };
+
     const hoverStyle = {
         backgroundColor: 'hsla(0, 0%, 100%, 0.2)',
         border: 'solid 4px white',
@@ -48,13 +49,6 @@ const ImageDropzone = ({ imageUrls, setImageUrls }) => {
             <img
                 key={Math.random().toString(36)}
                 src={url}
-                style={{
-                    width: 150,
-                    height: 150,
-                    objectFit: 'cover',
-                    backgroundColor: 'white',
-                    margin: 10,
-                }}
                 alt=''
                 onClick={handleRemove}
             />

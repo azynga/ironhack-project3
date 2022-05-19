@@ -65,10 +65,10 @@ const Create = () => {
     };
 
     useEffect(() => {
-        const savedFormData = JSON.parse(
+        const storedFormData = JSON.parse(
             localStorage.getItem('createFormData')
         );
-        if (savedFormData) {
+        if (storedFormData) {
             const {
                 title,
                 imageUrls,
@@ -78,7 +78,7 @@ const Create = () => {
                 category,
                 draft,
                 location,
-            } = savedFormData;
+            } = storedFormData;
 
             setTitle(title);
             setDescription(description);
@@ -103,84 +103,92 @@ const Create = () => {
     }, [title, imageUrls, description, tags, price, category, draft, location]);
 
     return (
-        <div className='create col'>
+        <main className='create col main-fill'>
             <h2>Create an ad</h2>
-            <form className='create-form col' onSubmit={handleCreateItem}>
-                <ImageDropzone
-                    imageUrls={imageUrls}
-                    setImageUrls={setImageUrls}
-                />
-
-                <label htmlFor='title' className='visually-hidden'>
-                    Title
-                </label>
-                <input
-                    type='text'
-                    id='title'
-                    placeholder='Title'
-                    autoFocus
-                    required
-                    minLength={5}
-                    maxLength={100}
-                    onChange={(event) => setTitle(event.target.value)}
-                    value={title}
-                />
-
-                <label htmlFor='description' className='visually-hidden'>
-                    Tags
-                </label>
-                <textarea
-                    type='text'
-                    id='tags'
-                    placeholder='Tags'
-                    required
-                    minLength={5}
-                    maxLength={100}
-                    onChange={(event) => setTags(event.target.value)}
-                    value={tags}
-                />
-                <label htmlFor='description' className='visually-hidden'>
-                    Description
-                </label>
-                <textarea
-                    type='text'
-                    id='description'
-                    placeholder='Description'
-                    maxLength={1000}
-                    onChange={(event) => setDescription(event.target.value)}
-                    value={description}
-                />
-
-                <label htmlFor='price' className='visually-hidden'>
-                    Price
-                </label>
-                <input
-                    type='number'
-                    id='price'
-                    placeholder='Price'
-                    step={1}
-                    required
-                    onChange={(event) => setPrice(event.target.value)}
-                    value={price}
-                />
-                <LocationForm location={location} setLocation={setLocation} />
-
-                <CategorySelect category={category} setCategory={setCategory} />
-
-                <label htmlFor='draft' className='white'>
-                    <input
-                        type='checkbox'
-                        name='draft'
-                        id='draft'
-                        onChange={() => setDraft(!draft)}
-                        checked={draft}
+            <div className='create-container'>
+                <form className='create-form col' onSubmit={handleCreateItem}>
+                    <ImageDropzone
+                        imageUrls={imageUrls}
+                        setImageUrls={setImageUrls}
                     />
-                    Save as draft?
-                </label>
 
-                <button>Create</button>
-            </form>
-        </div>
+                    <label htmlFor='title' className='visually-hidden'>
+                        Title
+                    </label>
+                    <input
+                        type='text'
+                        id='title'
+                        placeholder='Title'
+                        autoFocus
+                        required
+                        minLength={5}
+                        maxLength={100}
+                        onChange={(event) => setTitle(event.target.value)}
+                        value={title}
+                    />
+
+                    <label htmlFor='description' className='visually-hidden'>
+                        Tags
+                    </label>
+                    <textarea
+                        type='text'
+                        id='tags'
+                        placeholder='Tags'
+                        required
+                        minLength={5}
+                        maxLength={100}
+                        onChange={(event) => setTags(event.target.value)}
+                        value={tags}
+                    />
+                    <label htmlFor='description' className='visually-hidden'>
+                        Description
+                    </label>
+                    <textarea
+                        type='text'
+                        id='description'
+                        placeholder='Description'
+                        maxLength={1000}
+                        onChange={(event) => setDescription(event.target.value)}
+                        value={description}
+                    />
+
+                    <label htmlFor='price' className='visually-hidden'>
+                        Price
+                    </label>
+                    <input
+                        type='number'
+                        id='price'
+                        placeholder='Price'
+                        step={1}
+                        required
+                        onChange={(event) => setPrice(event.target.value)}
+                        value={price}
+                    />
+                    <LocationForm
+                        location={location}
+                        setLocation={setLocation}
+                    />
+
+                    <CategorySelect
+                        category={category}
+                        setCategory={setCategory}
+                    />
+
+                    <label htmlFor='draft' className='white'>
+                        <input
+                            type='checkbox'
+                            name='draft'
+                            id='draft'
+                            onChange={() => setDraft(!draft)}
+                            checked={draft}
+                        />
+                        Save as draft?
+                    </label>
+
+                    <button>Create</button>
+                </form>
+            </div>
+        </main>
     );
 };
 

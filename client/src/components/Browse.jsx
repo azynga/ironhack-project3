@@ -3,6 +3,7 @@ import { useContext, useEffect, useRef } from 'react';
 
 import { SearchContext } from '../App';
 import ItemList from './ItemList';
+import SearchSettings from './SearchSettings';
 
 const Browse = ({ items }) => {
     const initialRender = useRef(true);
@@ -37,7 +38,12 @@ const Browse = ({ items }) => {
 
     return (
         <>
-            <ItemList items={items} />
+            <aside>
+                <SearchSettings />
+            </aside>
+            <main className='content'>
+                <ItemList items={items} />
+            </main>
         </>
     );
 };

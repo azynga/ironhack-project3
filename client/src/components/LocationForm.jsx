@@ -32,6 +32,17 @@ const LocationForm = ({ location, setLocation }) => {
                     state: addressData.state,
                 };
 
+                const addressLine =
+                    (location.address.street && location.address.street + ' ') +
+                    (location.address.houseNumber &&
+                        location.address.houseNumber + ', ') +
+                    (location.address.postalCode &&
+                        location.address.postalCode + ' ') +
+                    (location.address.city && location.address.city + ', ') +
+                    location.address.state;
+
+                address.addressLine = addressLine;
+
                 const formattedResult = {
                     address,
                     geometry: result.geometry,

@@ -5,6 +5,7 @@ import { UserContext } from '../App';
 import { addMessage, getChat } from '../services/chat-service';
 
 import Message from './Message';
+import ChatList from './ChatList';
 
 const Chat = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Chat = () => {
     const endOfFeed = useRef();
 
     const scrollToBottom = () => {
-        endOfFeed.current?.scrollIntoView({ behavior: 'smooth' });
+        endOfFeed.current?.scrollIntoView();
     };
 
     useEffect(() => {
@@ -118,35 +119,46 @@ const Chat = () => {
     });
 
     return (
-        <div className='chat col'>
-            <div
-                className='feed col'
-                // style={{ width: 600, height: 600, overflow: 'scroll' }}
-            >
-                {feed}
-                <div ref={endOfFeed}></div>
-            </div>
-            <form onSubmit={handleSendMessage}>
-                <textarea
-                    type='text'
-                    onChange={(event) => setMessageText(event.target.value)}
-                    value={messageText}
-                    onKeyDown={(event) => {
-                        if (event.key === 'Enter' && !event.shiftKey) {
-                            handleSendMessage();
-                        }
-                    }}
-                />
-                <button>
-                    <i
-                        title='Send'
-                        className='bi bi-send'
-                        role='img'
-                        aria-label='Send'
-                    ></i>
-                </button>
-            </form>
-        </div>
+        <>
+            <aside>
+                <ChatList />
+            </aside>
+            <main className='chat col'>
+                <div
+                    className='feed col'
+                    // style={{ width: 600, height: 600, overflow: 'scroll' }}
+                >
+                    {feed}
+                    <div ref={endOfFeed}></div>
+                </div>
+                <form onSubmit={handleSendMessage}>
+                    <label htmlFor='message' className='visually-hidden'>
+                        Message
+                    </label>
+                    <textarea
+                        type='text'
+                        id='message'
+                        onChange={(event) => setMessageText(event.target.value)}
+                        value={messageText}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter' && !event.shiftKey) {
+                                handleSendMessage();
+                            }
+                        }}
+                        placeholder='Type here...'
+                        maxLength={1000}
+                    />
+                    <button>
+                        <i
+                            title='Send'
+                            className='bi bi-send'
+                            role='img'
+                            aria-label='Send'
+                        ></i>
+                    </button>
+                </form>
+            </main>
+        </>
     );
 };
 

@@ -9,29 +9,38 @@ const categories = [
     'Other',
 ];
 
-const CategorySelect = ({ category, setCategory }) => {
-    const radioButtons = categories.map((categoryOption) => {
+const CategorySelect = ({ category, setCategory, isFilter }) => {
+    const options = categories.map((categoryOption) => {
         return (
-            <label key={categoryOption}>
-                <input
-                    type='radio'
-                    name='category'
-                    id={categoryOption.toLowerCase()}
-                    required
-                    onChange={(event) => setCategory(event.target.value)}
-                    value={categoryOption}
-                    checked={categoryOption === category ? 'checked' : ''}
-                />
+            <option key={categoryOption} value={categoryOption}>
                 {categoryOption}
-            </label>
+            </option>
         );
     });
 
     return (
-        <fieldset className='col'>
-            <legend>Select a category</legend>
-            {radioButtons}
-        </fieldset>
+        <>
+            <label
+                htmlFor='category'
+                className={isFilter ? '' : 'visually-hidden'}
+            >
+                Category:
+            </label>
+            <select
+                name='Category'
+                id='category'
+                onChange={(event) => setCategory(event.target.value)}
+                value={category}
+            >
+                <option value=''>
+                    {isFilter ? 'Any' : 'Select a category'}
+                </option>
+
+                {/* {isFilter ? <option value='Any'>Any</option> : ''} */}
+
+                {options}
+            </select>
+        </>
     );
 };
 
