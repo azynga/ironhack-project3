@@ -499,7 +499,6 @@ button {
     // }
 
     fieldset {
-        flex-shrink: 1;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -516,7 +515,7 @@ button {
         // }
 
         legend {
-            padding: 0 10px 0 0;
+            padding: 0 10px;
             font-weight: bold;
             text-align: center;
         }
