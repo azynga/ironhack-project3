@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-const SortButton = ({ field, searchParams, setSearchParams }) => {
+import { SearchContext } from '../App';
+
+const SortButton = ({ field }) => {
+    const { searchParams, setSearchParams } = useContext(SearchContext);
+
     const setSortParam = () => {
         if (field === 'relevance') {
             setSearchParams({

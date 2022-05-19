@@ -28,8 +28,22 @@ const itemSchema = new Schema(
             required: true,
         },
         location: {
-            type: String,
-            required: true,
+            address: {
+                type: Schema.Types.Mixed,
+                required: true,
+            },
+            geometry: {
+                type: {
+                    type: String,
+                    enum: ['Point'],
+                    required: true,
+                },
+                coordinates: {
+                    index: '2dsphere',
+                    type: [Number],
+                    required: true,
+                },
+            },
         },
         public: {
             type: Boolean,
@@ -59,7 +73,10 @@ const itemSchema = new Schema(
     }
 );
 
-itemSchema.index({ title: 'text', tags: 'text' });
+itemSchema.index({
+    title: 'text',
+    tags: 'text',
+});
 
 const Item = model('Item', itemSchema);
 

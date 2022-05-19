@@ -1,24 +1,49 @@
-import React from 'react';
-import ItemList from './ItemList';
+import { useLocation } from 'react-router-dom';
+import { useContext, useEffect, useRef } from 'react';
 
-const Browse = ({ items, searchParams, setSearchParams }) => {
-    console.log(searchParams, items);
-    console.log(searchParams.toString());
+import { SearchContext } from '../App';
+import ItemList from './ItemList';
+import SearchSettings from './SearchSettings';
+
+const Browse = ({ items }) => {
+    const initialRender = useRef(true);
+    const { searchParams, setSearchParams } = useContext(SearchContext);
+    const { state, search } = useLocation();
+
+    const saveSearchParams = () => {
+        sessionStorage.setItem(
+            'searchParams',
+            JSON.stringify(Object.fromEntries(searchParams))
+        );
+    };
+
+    useEffect(() => {
+        const storedSearchParams = JSON.parse(
+            sessionStorage.getItem('searchParams')
+        );
+
+        setSearchParams({
+            ...Object.fromEntries(searchParams),
+            ...(storedSearchParams ? storedSearchParams : {}),
+            ...(state ? state : {}),
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!initialRender.current) {
+            saveSearchParams();
+        }
+        initialRender.current = false;
+    }, [search]);
 
     return (
         <>
-            <ItemList items={items} />
-            <button
-                onClick={() => {
-                    const newSearchParams = {
-                        ...Object.fromEntries(searchParams),
-                        limit: parseInt(searchParams.get('limit')) + 20,
-                    };
-                    setSearchParams(newSearchParams);
-                }}
-            >
-                Load more
-            </button>
+            <aside>
+                <SearchSettings />
+            </aside>
+            <main className='content'>
+                <ItemList items={items} />
+            </main>
         </>
     );
 };

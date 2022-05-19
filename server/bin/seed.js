@@ -32,6 +32,8 @@ const tagExamples = [
     'cozy',
 ];
 
+const genericImageUrl = 'https://picsum.photos/400';
+
 const genericUser = () => {
     return {
         username: 'user_' + Math.random().toString(36).slice(2),
@@ -41,13 +43,18 @@ const genericUser = () => {
 
 const genericItem = (users) => {
     const owner = users[Math.floor(Math.random() * users.length)]._id;
-    const numberOfTags = Math.floor(Math.random() * 4);
+    const numberOfTags = 2 + Math.floor(Math.random() * 5);
     const tags = new Array(numberOfTags)
         .fill()
         .map(
             (tag) => tagExamples[Math.floor(Math.random() * tagExamples.length)]
         )
-        .join(',');
+        .join(', ');
+
+    const numberOfImages = 1 + Math.floor(Math.random() * 6);
+    const images = new Array(numberOfImages)
+        .fill()
+        .map((image) => genericImageUrl);
 
     return {
         title: 'Article No. ' + Math.floor(Math.random() * 10000).toString(),
@@ -56,6 +63,9 @@ const genericItem = (users) => {
         category: categories[Math.floor(Math.random() * categories.length)],
         sold: Math.random() > 0.7 ? true : false,
         tags,
+        images,
+        public: true,
+        location: 'somewhere',
     };
 };
 
