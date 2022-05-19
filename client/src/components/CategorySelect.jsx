@@ -19,11 +19,8 @@ const CategorySelect = ({ category, setCategory, isFilter }) => {
     });
 
     return (
-        <>
-            <label
-                htmlFor='category'
-                className={isFilter ? '' : 'visually-hidden'}
-            >
+        <div className='category-select-container'>
+            <label htmlFor='category' className='visually-hidden'>
                 Category:
             </label>
             <select
@@ -33,14 +30,14 @@ const CategorySelect = ({ category, setCategory, isFilter }) => {
                 value={category}
             >
                 <option value=''>
-                    {isFilter ? 'Any' : 'Select a category'}
+                    {isFilter ? 'Any category' : 'Select a category'}
                 </option>
 
                 {/* {isFilter ? <option value='Any'>Any</option> : ''} */}
 
                 {options}
             </select>
-        </>
+        </div>
     );
 };
 

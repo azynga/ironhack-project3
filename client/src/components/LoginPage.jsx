@@ -5,17 +5,19 @@ import Signup from './Signup';
 
 const LoginPage = () => {
     return (
-        <div className='login-page row'>
-            <Login />
-            <div
+        <main className='login-page main-fill row'>
+            <div className='login-page-container'>
+                <Login />
+                {/* <div
                 className='divider'
                 style={{
                     height: '100%',
                     borderLeft: 'solid 1px white',
                 }}
-            ></div>
-            <Signup />
-        </div>
+            ></div> */}
+                <Signup />
+            </div>
+        </main>
     );
 };
 

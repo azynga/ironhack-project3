@@ -42,6 +42,24 @@ h3 {
     overflow: hidden;
 }
 
+.container {
+    position: relative;
+    background-color: white;
+    padding: 10px;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 8px;
+    bottom: -8px;
+    left: 8px;
+    right: -8px;
+    transition: top 0.2s, left 0.2s, bottom 0.2s, right 0.2s;
+    background-color: v.$purple-white;
+}
+
 .app-container {
     width: 100vw;
     height: 100vh;
@@ -125,6 +143,7 @@ h3 {
 
     > aside {
         grid-area: 1 / 1 / 2 / 2;
+        min-width: 190px;
     }
 
     > main {
@@ -139,6 +158,14 @@ h3 {
         grid-area: 1 / 1 / 2 / 6;
     }
 }
+
+// .login-page {
+//     flex-direction: row !important;
+// }
+
+// .auth-form-container {
+//     background-color: white;
+// }
 
 // .aside-wide {
 //     grid-area: 1 / 1 / 2 / 3 !important;
@@ -289,9 +316,6 @@ button {
 }
 
 .create {
-    .create-container {
-        background-color: white;
-    }
     justify-content: center;
     .create-form {
         width: 500px;
@@ -325,20 +349,26 @@ button {
 .login-page {
     width: 100%;
     height: 100%;
-    justify-content: space-evenly;
+    justify-content: center;
     gap: 20px;
-}
 
-.auth-form {
-    background-color: white;
-    padding: 40px;
-    width: 100%;
-    height: fit-content;
-    h2 {
-        margin: 0 0 20px;
+    .login-page-container {
+        display: flex;
+        justify-content: center;
     }
-    form {
-        gap: 2px;
+
+    .auth-form-container {
+        background-color: white;
+        margin: 20px;
+        padding: 40px;
+        max-width: 500px;
+        height: fit-content;
+        h2 {
+            margin: 0 0 20px;
+        }
+        form {
+            gap: 2px;
+        }
     }
 }
 
@@ -490,8 +520,28 @@ button {
     background-color: v.$purple-dark;
     height: 100%;
     gap: 40px;
+    align-items: center;
     padding: 20px 10px;
     color: v.$purple-white;
+
+    button {
+        width: 140px !important;
+    }
+
+    input,
+    select {
+        // background-color: transparent;
+        width: 140px;
+        border: none;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: hsla(0, 0%, 100%, 0.1);
+        color: v.$purple-white;
+    }
+
+    input::placeholder {
+        color: v.$purple-white;
+    }
 
     // form {
     //     position: relative;
@@ -510,9 +560,18 @@ button {
         button {
             width: 140px;
         }
-        // > * {
-        //     flex-shrink: 1;
-        // }
+
+        label {
+            margin: 5px;
+        }
+
+        input[type='number'] {
+            width: 4em;
+        }
+
+        input[type='range'] {
+            width: 6em;
+        }
 
         legend {
             padding: 0 10px;
@@ -537,12 +596,13 @@ button {
     }
 
     .distance-input-container,
-    .postalcode-input-container {
+    .postalcode-input-container,
+    .category-select-container {
+        justify-content: center;
+        align-items: center;
         width: 100%;
         display: flex;
-        * {
-            flex-shrink: 1;
-        }
+        margin: 10px 0;
     }
 }
 
@@ -564,14 +624,11 @@ button {
         content: '';
         position: absolute;
         z-index: -1;
-        // width: 500px;
-        // height: 150px;
         top: 8px;
         bottom: -8px;
         left: 8px;
         right: -8px;
         transition: top 0.2s, left 0.2s, bottom 0.2s, right 0.2s;
-
         background-color: v.$purple-white;
     }
 

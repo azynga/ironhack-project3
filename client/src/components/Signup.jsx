@@ -28,7 +28,7 @@ const Signup = () => {
     };
 
     return (
-        <div className='auth-form col'>
+        <div className='auth-form-container container col'>
             <h2>Sign up</h2>
             <form className='col' onSubmit={handleSignup}>
                 <label htmlFor='signup-username' className='visually-hidden'>

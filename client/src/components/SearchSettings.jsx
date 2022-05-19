@@ -88,6 +88,7 @@ const SearchSettings = () => {
                         setCategory={setCategory}
                         isFilter={true}
                     />
+
                     <DistanceForm
                         distance={distance}
                         setDistance={setDistance}

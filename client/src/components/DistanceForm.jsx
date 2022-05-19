@@ -8,6 +8,23 @@ const DistanceForm = ({ distance, setDistance, postalCode, setPostalCode }) => {
 
     return (
         <>
+            <div className='postalcode-input-container'>
+                <label htmlFor='postal-code' className='visually-hidden'>
+                    Postal code
+                </label>
+                <input
+                    type='text'
+                    name='postal-code'
+                    id='postal-code'
+                    placeholder='Postal code'
+                    required
+                    minLength={5}
+                    maxLength={5}
+                    value={postalCode}
+                    onChange={handlePostalCodeTyping}
+                    autoComplete='off'
+                />
+            </div>
             <label htmlFor='distance'>Max distance:</label>
             <div className='distance-input-container'>
                 <input
@@ -26,23 +43,6 @@ const DistanceForm = ({ distance, setDistance, postalCode, setPostalCode }) => {
                     onChange={(event) => setDistance(event.target.value)}
                 />
                 <span>km</span>
-            </div>
-            <div className='postalcode-input-container'>
-                <span>from</span>
-                <label htmlFor='postal-code' className='visually-hidden'>
-                    Postal code
-                </label>
-                <input
-                    type='text'
-                    name='postal-code'
-                    id='postal-code'
-                    placeholder='Postal code'
-                    required
-                    minLength={5}
-                    maxLength={5}
-                    value={postalCode}
-                    onChange={handlePostalCodeTyping}
-                />
             </div>
         </>
     );

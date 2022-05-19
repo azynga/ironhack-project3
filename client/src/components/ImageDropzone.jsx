@@ -5,15 +5,15 @@ import LoadingIcon from './LoadingIcon';
 
 const ImageDropzone = ({ imageUrls, setImageUrls }) => {
     const defaultStyle = {
-        border: 'dotted 4px white',
+        border: 'dotted 4px black',
         width: '100%',
         height: 200,
         position: 'relative',
     };
 
     const hoverStyle = {
-        backgroundColor: 'hsla(0, 0%, 100%, 0.2)',
-        border: 'solid 4px white',
+        backgroundColor: 'hsla(0, 0%, 0%, 0.2)',
+        border: 'solid 4px black',
     };
     // const [imageUrls, setImageUrls] = useState([]);
     const [uploadingFiles, setUploadingFiles] = useState(false);
@@ -67,7 +67,7 @@ const ImageDropzone = ({ imageUrls, setImageUrls }) => {
                         right: 0,
                         bottom: 0,
                         left: 0,
-                        color: 'white',
+                        color: 'black',
                         alignItems: 'center',
                         justifyContent: 'center',
                         textAlign: 'center',

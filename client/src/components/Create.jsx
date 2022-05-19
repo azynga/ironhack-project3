@@ -105,7 +105,7 @@ const Create = () => {
     return (
         <main className='create col main-fill'>
             <h2>Create an ad</h2>
-            <div className='create-container'>
+            <div className='create-container container'>
                 <form className='create-form col' onSubmit={handleCreateItem}>
                     <ImageDropzone
                         imageUrls={imageUrls}
