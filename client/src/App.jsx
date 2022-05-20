@@ -56,7 +56,7 @@ const App = () => {
     }, [notification]);
 
     useEffect(() => {
-        const socket = io('http://localhost:5005', {
+        const socket = io(process.env.REACT_APP_BASE_URL, {
             withCredentials: true,
         });
 
