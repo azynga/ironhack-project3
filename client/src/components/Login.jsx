@@ -26,10 +26,13 @@ const Login = () => {
                 setLoggedInUser(user);
                 socket.emit('join', user._id);
                 setNotification(user.unreadMessages);
-                localStorage.setItem(
-                    'createFormData',
-                    JSON.stringify(createFormData)
-                );
+
+                createFormData &&
+                    localStorage.setItem(
+                        'createFormData',
+                        JSON.stringify(createFormData)
+                    );
+
                 selectedChat &&
                     localStorage.setItem(
                         'selectedChat',

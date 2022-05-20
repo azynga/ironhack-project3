@@ -68,6 +68,7 @@ const Create = () => {
         const storedFormData = JSON.parse(
             localStorage.getItem('createFormData')
         );
+
         if (storedFormData) {
             const {
                 title,

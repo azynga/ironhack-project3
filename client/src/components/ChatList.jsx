@@ -32,8 +32,10 @@ const ChatList = () => {
     }, [socket]);
 
     useEffect(() => {
+        console.log('chatlist user: ', userId);
         getAllChatsOfUser(userId)
             .then((response) => {
+                console.log('getAllChatsOfUser response: ', response);
                 const chats = response.data.map((chat) => {
                     const otherUser = chat.participants.find(
                         (user) => user._id !== userId
