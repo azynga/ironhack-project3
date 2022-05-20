@@ -461,14 +461,14 @@ button {
         margin: 5px 10px 0px 0;
         transition: margin 0.2s, padding 0.2s;
 
-        background-color: hsla(0, 0%, 100%, 0.1);
+        background-color: hsla(0, 0%, 100%, 0.05);
         border-radius: 0 5px 5px 0;
         border: solid 1px v.$purple-white;
         border-left: none;
     }
 
     .enter-chat.even {
-        background-color: hsla(0, 0%, 100%, 0.05);
+        // background-color: hsla(0, 0%, 100%, 0.05);
     }
 
     .enter-chat.selected {

@@ -8,6 +8,7 @@ import Message from './Message';
 import ChatList from './ChatList';
 
 const Chat = () => {
+    console.log('reached chat component');
     const navigate = useNavigate();
     const {
         currentSocket: socket,
