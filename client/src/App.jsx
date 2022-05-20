@@ -19,6 +19,7 @@ import Create from './components/Create';
 import NoMatch from './components/NoMatch';
 import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import ChatPage from './components/ChatPage';
 import Chat from './components/Chat';
 import NavigateToSelectedChat from './components/NavigateToSelectedChat';
 import Profile from './components/Profile';
@@ -220,7 +221,7 @@ const App = () => {
                                 />
                                 <Route
                                     path='/messages'
-                                    element={<NavigateToSelectedChat />}
+                                    element={<ChatPage />}
                                 />
                                 <Route
                                     path='/messages/:chatId'
