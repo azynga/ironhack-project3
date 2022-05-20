@@ -9,16 +9,26 @@ import LoadingIcon from './LoadingIcon';
 const ItemDetails = () => {
     const { itemId } = useParams();
     const { loggedInUser, loadingUser } = useContext(UserContext);
-
     const [item, setItem] = useState(null);
     const [isOwn, setIsOwn] = useState(false);
     const [loadingItem, setLoadingItem] = useState(true);
-    // const isOwn = item?.owner === loggedInUser?._id;
-
-    // useEffect(() => {}, [loggedInUser]);
+    const storedSearchParams = JSON.parse(
+        sessionStorage.getItem('searchParams')
+    );
 
     useEffect(() => {
-        getOneItem(itemId)
+        if (loadingUser) {
+            return;
+        }
+
+        let coordinates = loggedInUser?.location.geometry.coordinates;
+
+        if (storedSearchParams?.postalcode) {
+            const { long, lat } = storedSearchParams;
+            coordinates = [long, lat];
+        }
+
+        getOneItem(itemId, coordinates)
             .then((response) => {
                 const item = response.data;
                 if (!item?._id) {
@@ -46,7 +56,7 @@ const ItemDetails = () => {
         );
     });
 
-    return loadingItem ? (
+    return loadingItem || loadingUser ? (
         <LoadingIcon />
     ) : !item ? (
         'Item not found'
@@ -67,12 +77,20 @@ const ItemDetails = () => {
                 <p>
                     <b>Price:</b> {item.price}€
                 </p>
-                <p>
-                    {item.distance < 1000
-                        ? '< 1'
-                        : `~ ${Math.round(item.distance / 1000)}`}
-                    km away from {loggedInUser.location.address.addressLine}
-                </p>
+
+                {loggedInUser?.location || storedSearchParams.postalcode ? (
+                    <p>
+                        {item.distance < 1000
+                            ? '< 1'
+                            : `~ ${Math.round(item.distance / 1000)}`}
+                        km away from{' '}
+                        {storedSearchParams.postalcode
+                            ? storedSearchParams.postalcode
+                            : loggedInUser.location?.address.addressLine}
+                    </p>
+                ) : (
+                    ''
+                )}
 
                 {loadingItem || loadingUser || !loggedInUser ? (
                     ''

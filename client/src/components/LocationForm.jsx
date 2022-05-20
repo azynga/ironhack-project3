@@ -9,9 +9,12 @@ const LocationForm = ({ location, setLocation }) => {
     const [postalCode, setPostalCode] = useState('');
     const [city, setCity] = useState('');
     const [loadingLocation, setLoadingLocation] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleAddressSearch = (event) => {
         event.preventDefault();
+        console.log(location);
+
         setLoadingLocation(true);
         getLocation({
             street,
@@ -22,24 +25,29 @@ const LocationForm = ({ location, setLocation }) => {
             .then((response) => {
                 const result = response.data.features[0];
                 const addressData =
-                    response.data.features[0].properties.address;
+                    response.data.features[0]?.properties?.address;
+
+                if (!addressData.state) {
+                    setErrorMessage('No location found');
+                    return;
+                } else {
+                    setErrorMessage('');
+                }
 
                 const address = {
                     street: addressData.road || '',
                     houseNumber: addressData.house_number || '',
                     postalCode: addressData.postcode || '',
                     city: addressData.city || addressData.town,
-                    state: addressData.state,
+                    state: addressData.state || '',
                 };
 
                 const addressLine =
-                    (location.address.street && location.address.street + ' ') +
-                    (location.address.houseNumber &&
-                        location.address.houseNumber + ', ') +
-                    (location.address.postalCode &&
-                        location.address.postalCode + ' ') +
-                    (location.address.city && location.address.city + ', ') +
-                    location.address.state;
+                    (address.street && address.street + ' ') +
+                    (address.houseNumber && address.houseNumber + ', ') +
+                    (address.postalCode && address.postalCode + ' ') +
+                    (address.city && address.city + ', ') +
+                    address.state;
 
                 address.addressLine = addressLine;
 
@@ -60,25 +68,17 @@ const LocationForm = ({ location, setLocation }) => {
             <fieldset>
                 {loadingLocation ? (
                     <LoadingIcon color='white' />
+                ) : errorMessage ? (
+                    <p>{errorMessage}</p>
                 ) : location ? (
                     <p className='white'>
                         Selected address: <br />
-                        <b>
-                            {location.address.street &&
-                                location.address.street + ' '}
-                            {location.address.houseNumber &&
-                                location.address.houseNumber + ', '}
-                            {location.address.postalCode &&
-                                location.address.postalCode + ' '}
-                            {location.address.city &&
-                                location.address.city + ', '}
-                            {location.address.state}
-                        </b>
+                        <b>{location.address?.addressLine}</b>
                     </p>
                 ) : (
-                    'No address selected'
+                    <p>No address selected</p>
                 )}
-                <legend>Address (will be hidden)</legend>
+                <legend>Address (will not be public)</legend>
                 <label htmlFor='street' className='visually-hidden'>
                     Street, House number
                 </label>

@@ -3,17 +3,24 @@ import { useNavigate } from 'react-router-dom';
 
 import { signup } from '../services/auth-service';
 import { UserContext } from '../App';
+import LocationForm from './LocationForm';
 
 const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [location, setLocation] = useState('');
+
     const [errorMessage, setErrorMessage] = useState(null);
     const { setLoggedInUser, currentSocket: socket } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleSignup = (event) => {
         event.preventDefault();
-        signup(username, password)
+        if (!location.address.state) {
+            setErrorMessage('Please enter your address');
+            return;
+        }
+        signup(username, password, location)
             .then((response) => {
                 const user = response.data;
                 setLoggedInUser(user);
@@ -42,6 +49,7 @@ const Signup = () => {
                     autoComplete='off'
                     maxLength={15}
                     onChange={(event) => setUsername(event.target.value)}
+                    required
                 />
 
                 <label htmlFor='signup-password' className='visually-hidden'>
@@ -53,7 +61,9 @@ const Signup = () => {
                     id='signup-password'
                     placeholder='Password'
                     onChange={(event) => setPassword(event.target.value)}
+                    required
                 />
+                <LocationForm location={location} setLocation={setLocation} />
                 <button>Sign up</button>
             </form>
             {errorMessage ? (

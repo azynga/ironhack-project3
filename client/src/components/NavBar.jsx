@@ -26,12 +26,12 @@ const NavBar = () => {
             .then(() => {
                 localStorage.clear();
                 sessionStorage.clear();
-                setSearchParams({});
                 return logout();
             })
             .then(() => {
                 socket.emit('leave', loggedInUser._id);
                 setLoggedInUser(null);
+                setSearchParams({});
             })
             .catch((error) => {
                 console.error(error);
