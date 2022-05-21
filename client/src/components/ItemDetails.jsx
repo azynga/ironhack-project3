@@ -67,7 +67,7 @@ const ItemDetails = () => {
     ) : (
         <main className='item-details main-fill'>
             <h2>{item.title}</h2>
-            <div className='item-details-container'>
+            <div className='item-details-container container'>
                 <div className='item-images'>{gallery}</div>
                 <p>
                     <b>Category:</b> {item.category}

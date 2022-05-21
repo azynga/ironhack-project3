@@ -19,6 +19,7 @@ const Create = () => {
     const [category, setCategory] = useState('');
     const [location, setLocation] = useState(null);
     const [draft, setDraft] = useState(false);
+    const [error, setError] = useState(null);
     const initialRender = useRef(true);
 
     const saveChanges = () => {
@@ -39,6 +40,17 @@ const Create = () => {
 
     const handleCreateItem = (event) => {
         event.preventDefault();
+
+        if (!location) {
+            setError('Please provide an address. A postal code is sufficient.');
+            return;
+        }
+
+        if (!category) {
+            setError('Please select a category.');
+            return;
+        }
+
         createItem({
             title,
             images: imageUrls,
@@ -55,11 +67,13 @@ const Create = () => {
                 if (!response.data._id) {
                     throw new Error('Item could not be created');
                 }
+                setError(null);
                 const newItem = response.data;
                 localStorage.setItem('createFormData', JSON.stringify(''));
                 navigate('/items/' + newItem._id);
             })
             .catch((error) => {
+                setError('There was a problem creating this item.');
                 console.error(error);
             });
     };
@@ -185,7 +199,7 @@ const Create = () => {
                         />
                         Save as draft?
                     </label>
-
+                    {error ? <div className='error'>{error}</div> : ''}
                     <button>Create</button>
                 </form>
             </div>
