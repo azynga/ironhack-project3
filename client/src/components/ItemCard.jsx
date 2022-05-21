@@ -16,7 +16,7 @@ const ItemCard = ({ item }) => {
                 </p>
                 <Link to={'/items/' + item._id}>Details</Link>
             </div>
-            <div className='item-image'>
+            <div className='item-image-container'>
                 <img className='item-image' src={item.images[0]} alt='' />
             </div>
         </div>

@@ -24,7 +24,7 @@ const Profile = ({ user }) => {
                 <ProfileNav />
             </aside>
             <main className='profile'>
-                <h2>{user.username}</h2>
+                <h2>{user.username}'s items</h2>
                 <div className='item-list col'>{itemList}</div>
             </main>
         </>

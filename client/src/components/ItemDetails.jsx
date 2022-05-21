@@ -47,12 +47,16 @@ const ItemDetails = () => {
 
     const gallery = item?.images.map((image, index) => {
         return (
-            <img
+            <div
+                className='item-image-container'
                 key={Math.random().toString(36)}
-                className={index === 0 ? 'first-image' : ''}
-                src={image}
-                alt=''
-            />
+            >
+                <img
+                    className={index === 0 ? 'first-image' : ''}
+                    src={image}
+                    alt=''
+                />
+            </div>
         );
     });
 

@@ -42,7 +42,7 @@ const Login = () => {
             })
             .catch((error) => {
                 console.error(error);
-                setErrorMessage(error.response.data.errorMessage);
+                setErrorMessage(error.response.data.message);
             });
     };
 
@@ -75,11 +75,7 @@ const Login = () => {
                 />
                 <button>Log in</button>
             </form>
-            {errorMessage ? (
-                <div className='error white'>{errorMessage}</div>
-            ) : (
-                ''
-            )}
+            {errorMessage ? <div className='error'>{errorMessage}</div> : ''}
         </div>
     );
 };

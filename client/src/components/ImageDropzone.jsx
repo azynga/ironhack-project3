@@ -17,6 +17,7 @@ const ImageDropzone = ({ imageUrls, setImageUrls }) => {
     };
     // const [imageUrls, setImageUrls] = useState([]);
     const [uploadingFiles, setUploadingFiles] = useState(false);
+    const [error, setError] = useState(false);
     const [style, setStyle] = useState(defaultStyle);
 
     const handleUpload = (event) => {
@@ -33,10 +34,16 @@ const ImageDropzone = ({ imageUrls, setImageUrls }) => {
         setUploadingFiles(true);
         uploadImages(uploadData)
             .then((response) => {
+                setError(false);
                 setImageUrls([...imageUrls, ...response.data]);
-                setUploadingFiles(false);
             })
-            .catch((error) => console.error(error));
+            .catch((error) => {
+                setError(true);
+                console.error(error);
+            })
+            .finally(() => {
+                setUploadingFiles(false);
+            });
     };
 
     const handleRemove = (event) => {
@@ -57,7 +64,17 @@ const ImageDropzone = ({ imageUrls, setImageUrls }) => {
 
     return (
         <>
-            <div className='selected-images'>{images}</div>
+            <div className='selected-images'>
+                {error ? (
+                    <div className='error'>
+                        Error uploading this image. Make sure it is a JPG, PNG
+                        or GIF file.
+                    </div>
+                ) : (
+                    ''
+                )}
+                {images}
+            </div>
             <div className='image-dropzone' style={style}>
                 <div
                     className='dropzone-text col'
@@ -74,7 +91,7 @@ const ImageDropzone = ({ imageUrls, setImageUrls }) => {
                     }}
                 >
                     {uploadingFiles ? (
-                        <LoadingIcon color='white' />
+                        <LoadingIcon color='black' />
                     ) : (
                         <div>
                             <b>Drag images here</b>

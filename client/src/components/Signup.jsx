@@ -16,7 +16,7 @@ const Signup = () => {
 
     const handleSignup = (event) => {
         event.preventDefault();
-        if (!location.address.state) {
+        if (!location?.address?.state) {
             setErrorMessage('Please enter your address');
             return;
         }
