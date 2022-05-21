@@ -17,6 +17,8 @@ const Login = () => {
 
     const handleLogin = (event) => {
         event.preventDefault();
+        localStorage.clear();
+        sessionStorage.clear();
         login(username, password)
             .then((response) => {
                 const user = response.data;
