@@ -11,7 +11,6 @@ const EnterChat = ({ otherUserId, children, selected, even }) => {
     const handleEnterChat = () => {
         getChatId(loggedInUser._id, otherUserId)
             .then((response) => {
-                console.log('getChatId response: ', response);
                 const chatId = response.data;
                 navigate('/messages/' + chatId, { replace: true });
             })
