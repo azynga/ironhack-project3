@@ -67,7 +67,7 @@ const LocationForm = ({ location, setLocation }) => {
         <div className='location-form'>
             <fieldset className='col'>
                 {loadingLocation ? (
-                    <LoadingIcon color='white' />
+                    <LoadingIcon color='black' />
                 ) : errorMessage ? (
                     <p>{errorMessage}</p>
                 ) : location ? (
