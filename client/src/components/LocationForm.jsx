@@ -38,7 +38,7 @@ const LocationForm = ({ location, setLocation }) => {
                     street: addressData.road || '',
                     houseNumber: addressData.house_number || '',
                     postalCode: addressData.postcode || '',
-                    city: addressData.city || addressData.town,
+                    city: addressData.city || addressData.town || '',
                     state: addressData.state || '',
                 };
 
@@ -47,7 +47,7 @@ const LocationForm = ({ location, setLocation }) => {
                     (address.houseNumber && address.houseNumber + ', ') +
                     (address.postalCode && address.postalCode + ' ') +
                     (address.city && address.city + ', ') +
-                    address.state;
+                    (address.state && address.state);
 
                 address.addressLine = addressLine;
 
