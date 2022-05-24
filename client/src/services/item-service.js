@@ -23,4 +23,8 @@ const createItem = (itemData) => {
     return service.post('/items', itemData);
 };
 
-export { getItems, getOneItem, uploadImages, createItem };
+const updateItem = (itemId, updateData) => {
+    return service.put('/items/' + itemId, updateData);
+};
+
+export { getItems, getOneItem, uploadImages, createItem, updateItem };

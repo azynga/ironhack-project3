@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import LikeButton from './LikeButton';
+
 const ItemCard = ({ item }) => {
     return (
         <div className='item'>
             <div className='item-text'>
                 <h3>{item.title}</h3>
+                {/* <LikeButton itemId={item._id} /> */}
                 <p>
                     <b>Tags: </b>
                     {item.tags}

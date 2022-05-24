@@ -576,10 +576,9 @@ button {
         color: v.$purple-white;
     }
 
-    // form {
-    //     position: relative;
-    //     width: 100%;
-    // }
+    form {
+        display: contents;
+    }
 
     fieldset {
         width: 100%;
@@ -718,4 +717,19 @@ button {
         align-items: flex-start;
         gap: 5px;
     }
+}
+
+.like {
+    color: v.$orange;
+    font-size: 2em;
+}
+
+.unlike {
+    color: v.$orange;
+    font-size: 2em;
+}
+
+.profile,
+.favorites {
+    padding-bottom: 20px;
 }

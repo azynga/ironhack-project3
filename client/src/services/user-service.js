@@ -12,8 +12,12 @@ const getAllItemsOfUser = (userId) => {
     return service.get(`/users/${userId}/items`);
 };
 
+const getAllFavsOfUser = (userId) => {
+    return service.get(`/users/${userId}/favorites`);
+};
+
 const updateUser = (userId, property) => {
     return service.put('/users/' + userId, property);
 };
 
-export { saveNotification, getAllItemsOfUser, updateUser };
+export { saveNotification, getAllItemsOfUser, updateUser, getAllFavsOfUser };

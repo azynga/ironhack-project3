@@ -173,12 +173,12 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     Item.findByIdAndUpdate(id, req.body, { new: true })
-        .populate('owner')
+        // .populate('owner')
         .then((updatedItem) => {
             res.json(updatedItem);
         })
         .catch((error) => {
-            res.json(updatedItem);
+            res.json(error);
         });
 });
 

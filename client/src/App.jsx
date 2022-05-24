@@ -21,9 +21,9 @@ import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ChatPage from './components/ChatPage';
 import Chat from './components/Chat';
-import NavigateToSelectedChat from './components/NavigateToSelectedChat';
 import Profile from './components/Profile';
 import AccountSettings from './components/AccountSettings';
+import Favorites from './components/Favorites';
 
 export const SearchContext = createContext();
 export const UserContext = createContext();
@@ -214,6 +214,10 @@ const App = () => {
                                 <Route
                                     path='/profile'
                                     element={<Profile user={loggedInUser} />}
+                                />
+                                <Route
+                                    path='/profile/favorites'
+                                    element={<Favorites user={loggedInUser} />}
                                 />
                                 <Route
                                     path='/profile/settings'

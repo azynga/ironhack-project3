@@ -5,6 +5,7 @@ import { getOneItem } from '../services/item-service';
 import { UserContext } from '../App';
 import EnterChat from './EnterChat';
 import LoadingIcon from './LoadingIcon';
+import LikeButton from './LikeButton';
 
 const ItemDetails = () => {
     const { itemId } = useParams();
@@ -67,6 +68,12 @@ const ItemDetails = () => {
     ) : (
         <main className='item-details main-fill'>
             <h2>{item.title}</h2>
+            {loggedInUser && !loggedInUser.itemsForSale.includes(item._id) ? (
+                <LikeButton itemId={item._id} />
+            ) : (
+                ''
+            )}
+
             <div className='item-details-container container'>
                 <div className='item-images'>{gallery}</div>
                 <p>
@@ -82,13 +89,13 @@ const ItemDetails = () => {
                     <b>Price:</b> {item.price}€
                 </p>
 
-                {loggedInUser?.location || storedSearchParams.postalcode ? (
+                {loggedInUser?.location || storedSearchParams?.postalcode ? (
                     <p>
                         {item.distance < 1000
                             ? '< 1'
                             : `~ ${Math.round(item.distance / 1000)}`}
                         km away from{' '}
-                        {storedSearchParams.postalcode
+                        {storedSearchParams?.postalcode
                             ? storedSearchParams.postalcode
                             : loggedInUser.location?.address.addressLine}
                     </p>
