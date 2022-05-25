@@ -42,7 +42,6 @@ module.exports = (app) => {
             credentials: true,
             origin: process.env.ORIGIN,
             methods: ['GET', 'PUT', 'POST', 'DELETE'],
-            // allowedHeaders:
         })
     );
 
@@ -52,6 +51,8 @@ module.exports = (app) => {
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
+
+    app.enable('trust proxy');
 
     const store = MongoStore.create({
         mongoUrl: MONGO_URI,
@@ -64,7 +65,11 @@ module.exports = (app) => {
             resave: false,
             store: store,
             saveUninitialized: false,
-            cookie: { maxAge: 1000 * 60 * 60 * 24 * 365 * 10 },
+            cookie: {
+                maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+                sameSite: 'none',
+                secure: true,
+            },
         })
     );
 
