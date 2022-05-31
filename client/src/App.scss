@@ -1,6 +1,6 @@
 @use './components/styles/variables' as v;
 
-@import url('http://fonts.cdnfonts.com/css/montserrat');
+@import url('https://fonts.cdnfonts.com/css/montserrat');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css');
 
 * {
@@ -17,10 +17,12 @@ a {
     color: inherit;
 }
 
-h1,
-h2,
-h3 {
+h1 {
     margin: 0;
+}
+
+h2 {
+    color: v.$purple-white;
 }
 
 .row {
@@ -45,7 +47,10 @@ h3 {
 .container {
     position: relative;
     background-color: white;
-    padding: 10px;
+    border: solid 1px v.$purple-dark;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
 }
 
 .container::before {
@@ -58,6 +63,14 @@ h3 {
     right: -8px;
     transition: top 0.2s, left 0.2s, bottom 0.2s, right 0.2s;
     background-color: v.$purple-white;
+    border-radius: 5px;
+}
+
+.error {
+    background-color: hsl(0, 80%, 80%);
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
 }
 
 .app-container {
@@ -198,8 +211,8 @@ button {
     grid-template-areas: 'text image';
     position: relative;
     width: 500px;
-    // height: 150px;
     border: solid 1px rgb(0, 0, 0);
+    border-radius: 5px;
     padding: 10px;
     background-color: white;
     top: 0;
@@ -208,13 +221,20 @@ button {
 
     /* box-shadow: 5px 5px 0 hsl(275, 100%, 73%); */
     /* transition: box-shadow 0.3s; */
+    .item-image-container {
+        width: 180px;
+        height: 180px;
+    }
+
     .item-image {
-        grid-area: 'text';
+        grid-area: 'image';
         width: 100%;
         height: 100%;
+        object-fit: cover;
     }
+
     .item-text {
-        grid-area: 'image';
+        grid-area: 'text';
     }
 }
 
@@ -222,14 +242,12 @@ button {
     content: '';
     position: absolute;
     z-index: -1;
-    // width: 500px;
-    // height: 150px;
+    border-radius: 5px;
     top: 2px;
     bottom: -2px;
     left: 2px;
     right: -2px;
     transition: top 0.2s, left 0.2s, bottom 0.2s, right 0.2s;
-
     background-color: v.$purple-white;
 }
 
@@ -317,8 +335,16 @@ button {
 
 .create {
     justify-content: center;
+
+    // .create-container {
+    //     display: flex;
+    //     gap: 20px;
+    // }
+
     .create-form {
         width: 500px;
+        display: flex;
+        gap: 20px;
         // background-color: white;
     }
 
@@ -414,6 +440,7 @@ button {
         gap: 2px;
         overflow: scroll;
         height: 100%;
+        margin-top: 20px;
 
         .message {
             word-wrap: break-word;
@@ -447,7 +474,7 @@ button {
     .chat-preview {
         padding: 15px;
         h3 {
-            margin-bottom: 5px;
+            margin: 0 0 5px 0;
         }
         p {
             margin: 0;
@@ -461,15 +488,15 @@ button {
         margin: 5px 10px 0px 0;
         transition: margin 0.2s, padding 0.2s;
 
-        background-color: hsla(0, 0%, 100%, 0.1);
+        background-color: hsla(0, 0%, 100%, 0.05);
         border-radius: 0 5px 5px 0;
         border: solid 1px v.$purple-white;
         border-left: none;
     }
 
-    .enter-chat.even {
-        background-color: hsla(0, 0%, 100%, 0.05);
-    }
+    // .enter-chat.even {
+    //     background-color: hsla(0, 0%, 100%, 0.05);
+    // }
 
     .enter-chat.selected {
         margin: 5px 0 5px 0;
@@ -528,6 +555,12 @@ button {
         width: 140px !important;
     }
 
+    button:hover,
+    input:hover,
+    select:hover {
+        background-color: hsla(0, 0%, 100%, 0.2);
+    }
+
     input,
     select {
         // background-color: transparent;
@@ -543,10 +576,9 @@ button {
         color: v.$purple-white;
     }
 
-    // form {
-    //     position: relative;
-    //     width: 100%;
-    // }
+    form {
+        display: contents;
+    }
 
     fieldset {
         width: 100%;
@@ -607,14 +639,15 @@ button {
 }
 
 .item-details {
-    h2 {
-        color: v.$purple-white;
-    }
+    // h2 {
+    //     color: v.$purple-white;
+    //     margin: 20px;
+    // }
 
     .item-details-container {
+        // margin-bottom: 40px;
         position: relative;
         max-width: 700px;
-        min-height: 90%;
         background-color: white;
         padding: 20px;
         border: solid 1px v.$purple-dark;
@@ -633,12 +666,70 @@ button {
     }
 
     .item-images {
-        img {
-            width: 150px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        .item-image-container {
+            height: 300px;
+            width: 300px;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         }
 
         // img.first-image {
         //     width: 300px;
         // }
     }
+}
+
+.profile-nav {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: white;
+
+    a {
+        all: unset;
+        background-color: hsla(0, 0%, 100%, 0.1);
+        margin: 2px;
+        padding: 5px;
+        border-radius: 5px;
+        text-align: center;
+        border: solid 1px v.$purple-white;
+        width: 140px;
+        cursor: default;
+    }
+
+    a:hover {
+        background-color: hsla(0, 0%, 100%, 0.2);
+    }
+}
+
+.location-form {
+    fieldset {
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+.like {
+    color: v.$orange;
+    font-size: 2em;
+}
+
+.unlike {
+    color: v.$orange;
+    font-size: 2em;
+}
+
+.profile,
+.favorites {
+    padding-bottom: 20px;
 }

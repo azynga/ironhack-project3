@@ -1,23 +1,30 @@
 import axios from 'axios';
 
 const service = axios.create({
-    baseURL: '/api',
+    baseURL: process.env.REACT_APP_API_URL,
 });
 
 const getItems = (searchParams) => {
     return service.get('/items?' + searchParams);
 };
 
-const getOneItem = (itemId) => {
-    return service.get('items/' + itemId);
+const getOneItem = (itemId, searchCoordinates) => {
+    const queryString = searchCoordinates
+        ? `?long=${searchCoordinates[0]}&lat=${searchCoordinates[1]}`
+        : '';
+    return service.get(`/items/${itemId}${queryString}`);
 };
 
 const uploadImages = (files) => {
-    return service.post('items/images', files);
+    return service.post('/items/images', files);
 };
 
 const createItem = (itemData) => {
     return service.post('/items', itemData);
 };
 
-export { getItems, getOneItem, uploadImages, createItem };
+const updateItem = (itemId, updateData) => {
+    return service.put('/items/' + itemId, updateData);
+};
+
+export { getItems, getOneItem, uploadImages, createItem, updateItem };

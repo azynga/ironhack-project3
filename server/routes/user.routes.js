@@ -14,6 +14,19 @@ router.get('/:userId/items', (req, res) => {
         });
 });
 
+router.get('/:userId/favorites', (req, res) => {
+    const { userId } = req.params;
+    User.findById(userId, { favoriteItems: 1, _id: 0 })
+        .populate('favoriteItems')
+        .then((response) => {
+            const { favoriteItems } = response;
+            res.json(favoriteItems);
+        })
+        .catch((error) => {
+            res.status(500).json(error);
+        });
+});
+
 router.put('/:userId', (req, res) => {
     const { userId } = req.params;
 

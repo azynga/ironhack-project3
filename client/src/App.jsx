@@ -1,5 +1,11 @@
 import { useState, useEffect, createContext } from 'react';
-import { Routes, Route, useSearchParams, Navigate } from 'react-router-dom';
+import {
+    Routes,
+    Route,
+    useSearchParams,
+    Navigate,
+    useLocation,
+} from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 import './App.scss';
@@ -8,23 +14,22 @@ import { loggedin } from './services/auth-service';
 import { saveNotification } from './services/user-service';
 import Header from './components/Header';
 import Browse from './components/Browse';
-import SearchSettings from './components/SearchSettings';
 import ItemDetails from './components/ItemDetails';
 import Create from './components/Create';
 import NoMatch from './components/NoMatch';
 import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import ChatList from './components/ChatList';
+import ChatPage from './components/ChatPage';
 import Chat from './components/Chat';
-import NavigateToSelectedChat from './components/NavigateToSelectedChat';
 import Profile from './components/Profile';
-import ProfileNav from './components/ProfileNav';
 import AccountSettings from './components/AccountSettings';
+import Favorites from './components/Favorites';
 
 export const SearchContext = createContext();
 export const UserContext = createContext();
 
 const App = () => {
+    const currentLocation = useLocation();
     const [loggedInUser, setLoggedInUser] = useState(null);
     const [loadingUser, setLoadingUser] = useState(true);
     const [notification, setNotification] = useState(false);
@@ -34,9 +39,9 @@ const App = () => {
     const [searchParams, setSearchParams] = useSearchParams({
         sort: 'date_desc',
         limit: 10,
-        distance: 15,
-        long: 13.3888599,
-        lat: 52.5170365,
+        // distance: 15,
+        // long: 13.3888599,
+        // lat: 52.5170365,
     });
 
     // useEffect(() => {
@@ -56,7 +61,7 @@ const App = () => {
     }, [notification]);
 
     useEffect(() => {
-        const socket = io('http://localhost:5005', {
+        const socket = io(process.env.REACT_APP_BASE_URL, {
             withCredentials: true,
         });
 
@@ -74,7 +79,7 @@ const App = () => {
                     const user = response.data;
                     setLoggedInUser(user);
                     const { coordinates } = user.location.geometry;
-                    if (!searchParams.has('long') || !searchParams.has('lat')) {
+                    if (!searchParams.get('postalcode')) {
                         setSearchParams({
                             ...Object.fromEntries(searchParams),
                             long: coordinates[0],
@@ -98,7 +103,16 @@ const App = () => {
     }, []);
 
     useEffect(() => {
+        if (loadingUser || currentLocation.pathname !== '/browse') {
+            setIsLoading(false);
+            return;
+        }
         setIsLoading(true);
+        if (!searchParams.get('postalcode') && loggedInUser?.location) {
+            const { coordinates } = loggedInUser.location.geometry;
+            searchParams.set('long', coordinates[0]);
+            searchParams.set('lat', coordinates[1]);
+        }
         getItems(searchParams.toString())
             .then((response) => {
                 if (response.data.constructor !== Array) {
@@ -117,7 +131,7 @@ const App = () => {
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [searchParams]);
+    }, [searchParams, loadingUser]);
 
     return (
         <div className='app-container'>
@@ -202,12 +216,16 @@ const App = () => {
                                     element={<Profile user={loggedInUser} />}
                                 />
                                 <Route
+                                    path='/profile/favorites'
+                                    element={<Favorites user={loggedInUser} />}
+                                />
+                                <Route
                                     path='/profile/settings'
                                     element={<AccountSettings />}
                                 />
                                 <Route
                                     path='/messages'
-                                    element={<NavigateToSelectedChat />}
+                                    element={<ChatPage />}
                                 />
                                 <Route
                                     path='/messages/:chatId'

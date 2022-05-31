@@ -16,17 +16,14 @@ const userSchema = new Schema(
         location: {
             address: {
                 type: Schema.Types.Mixed,
-                required: true,
             },
             geometry: {
                 type: {
                     type: String,
                     enum: ['Point'],
-                    required: true,
                 },
                 coordinates: {
                     type: [Number],
-                    required: true,
                 },
             },
         },

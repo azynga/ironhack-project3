@@ -10,21 +10,12 @@ const User = require('../models/User.model');
 
 router.get('/', (req, res) => {
     const pipeline = (query) => {
-        const {
-            search,
-            category,
-            location,
-            skip,
-            sort,
-            limit,
-            distance,
-            long,
-            lat,
-        } = query;
+        // console.log(query);
+        const { search, category, skip, sort, limit, distance, long, lat } =
+            query;
         const sold = !!query.sold;
         const match = {
             ...(category && { category }),
-            ...(location && { location }),
             sold,
         };
 
@@ -36,22 +27,28 @@ router.get('/', (req, res) => {
             date_desc: { updatedAt: -1 },
         };
 
+        const withLocation = lat && long && distance;
+
         if (search) {
             return [
                 { $match: { $text: { $search: search } } },
                 { $match: match },
-                {
-                    $match: {
-                        'location.geometry.coordinates': {
-                            $geoWithin: {
-                                $centerSphere: [
-                                    [Number(long), Number(lat)],
-                                    Number(distance) / 6378.15214,
-                                ],
-                            },
-                        },
-                    },
-                },
+                ...(withLocation
+                    ? [
+                          {
+                              $match: {
+                                  'location.geometry.coordinates': {
+                                      $geoWithin: {
+                                          $centerSphere: [
+                                              [Number(long), Number(lat)],
+                                              Number(distance) / 6378.15214,
+                                          ],
+                                      },
+                                  },
+                              },
+                          },
+                      ]
+                    : []),
                 { $addFields: { score: { $meta: 'textScore' } } },
                 {
                     $sort: {
@@ -65,18 +62,22 @@ router.get('/', (req, res) => {
         } else {
             return [
                 { $match: match },
-                {
-                    $match: {
-                        'location.geometry.coordinates': {
-                            $geoWithin: {
-                                $centerSphere: [
-                                    [Number(long), Number(lat)],
-                                    Number(distance) / 6378.15214,
-                                ],
-                            },
-                        },
-                    },
-                },
+                ...(withLocation
+                    ? [
+                          {
+                              $match: {
+                                  'location.geometry.coordinates': {
+                                      $geoWithin: {
+                                          $centerSphere: [
+                                              [Number(long), Number(lat)],
+                                              Number(distance) / 6378.15214,
+                                          ],
+                                      },
+                                  },
+                              },
+                          },
+                      ]
+                    : []),
                 {
                     $sort: {
                         ...(sort ? sortOptions[sort] : sortOptions.date_desc),
@@ -89,6 +90,11 @@ router.get('/', (req, res) => {
         }
     };
 
+    // console.dir(
+    //     pipeline(req.query)[1]['$match']['location.geometry.coordinates'][
+    //         '$geoWithin'
+    //     ]
+    // );
     Item.aggregate(pipeline(req.query))
         .then((match) => {
             res.json(match);
@@ -100,19 +106,31 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     const { id } = req.params;
+    const { long, lat } = req.query;
 
-    Item.aggregate([
-        {
-            $geoNear: {
-                query: { _id: ObjectId(id) },
-                near: {
-                    type: 'Point',
-                    coordinates: [13.38445327743614, 52.49386885],
-                },
-                distanceField: 'distance',
-            },
-        },
-    ])
+    const pipeline =
+        long && lat
+            ? [
+                  {
+                      $geoNear: {
+                          query: { _id: ObjectId(id) },
+                          near: {
+                              type: 'Point',
+                              coordinates: [Number(long), Number(lat)],
+                          },
+                          distanceField: 'distance',
+                      },
+                  },
+              ]
+            : [
+                  {
+                      $match: {
+                          _id: ObjectId(id),
+                      },
+                  },
+              ];
+
+    Item.aggregate(pipeline)
         .then((result) => {
             const item = result[0];
             if (!item) {
@@ -155,12 +173,12 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     Item.findByIdAndUpdate(id, req.body, { new: true })
-        .populate('owner')
+        // .populate('owner')
         .then((updatedItem) => {
             res.json(updatedItem);
         })
         .catch((error) => {
-            res.json(updatedItem);
+            res.json(error);
         });
 });
 

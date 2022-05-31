@@ -17,7 +17,6 @@ const DistanceForm = ({ distance, setDistance, postalCode, setPostalCode }) => {
                     name='postal-code'
                     id='postal-code'
                     placeholder='Postal code'
-                    required
                     minLength={5}
                     maxLength={5}
                     value={postalCode}

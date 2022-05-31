@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getAllItemsOfUser } from '../services/user-service';
+import { getAllFavsOfUser } from '../services/user-service';
 import ItemCard from './ItemCard';
 import ProfileNav from './ProfileNav';
 
-const Profile = ({ user }) => {
+const Favorites = ({ user }) => {
     const [items, setItems] = useState(null);
 
     useEffect(() => {
-        getAllItemsOfUser(user._id)
+        getAllFavsOfUser(user._id)
             .then((response) => {
                 setItems(response.data);
             })
@@ -23,12 +23,12 @@ const Profile = ({ user }) => {
             <aside className='sidebar'>
                 <ProfileNav />
             </aside>
-            <main className='profile'>
-                <h2>{user.username}'s items</h2>
+            <main className='favorites'>
+                <h2>{user.username}'s favorites</h2>
                 <div className='item-list col'>{itemList}</div>
             </main>
         </>
     );
 };
 
-export default Profile;
+export default Favorites;

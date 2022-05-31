@@ -17,6 +17,8 @@ const Login = () => {
 
     const handleLogin = (event) => {
         event.preventDefault();
+        localStorage.clear();
+        sessionStorage.clear();
         login(username, password)
             .then((response) => {
                 const user = response.data;
@@ -26,10 +28,13 @@ const Login = () => {
                 setLoggedInUser(user);
                 socket.emit('join', user._id);
                 setNotification(user.unreadMessages);
-                localStorage.setItem(
-                    'createFormData',
-                    JSON.stringify(createFormData)
-                );
+
+                createFormData &&
+                    localStorage.setItem(
+                        'createFormData',
+                        JSON.stringify(createFormData)
+                    );
+
                 selectedChat &&
                     localStorage.setItem(
                         'selectedChat',
@@ -39,7 +44,7 @@ const Login = () => {
             })
             .catch((error) => {
                 console.error(error);
-                setErrorMessage(error.response.data.errorMessage);
+                setErrorMessage(error.response.data.message);
             });
     };
 
@@ -72,11 +77,7 @@ const Login = () => {
                 />
                 <button>Log in</button>
             </form>
-            {errorMessage ? (
-                <div className='error white'>{errorMessage}</div>
-            ) : (
-                ''
-            )}
+            {errorMessage ? <div className='error'>{errorMessage}</div> : ''}
         </div>
     );
 };

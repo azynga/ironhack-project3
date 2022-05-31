@@ -25,22 +25,35 @@ const SearchSettings = () => {
 
     const handleResetSearch = () => {
         sessionStorage.clear();
-        setSearchParams({});
         setDistance(15);
         setPostalCode('');
+        setSearchParams({});
     };
 
     const handleApplyFilter = (event) => {
         event.preventDefault();
+
+        const newSearchParams = {
+            ...Object.fromEntries(searchParams),
+            limit: 10,
+        };
+
+        if (!postalCode) {
+            newSearchParams.postalcode = '';
+            newSearchParams.long =
+                loggedInUser?.location.geometry.coordinates[0] || '';
+            newSearchParams.lat =
+                loggedInUser?.location.geometry.coordinates[1] || '';
+            newSearchParams.category = category;
+            setSearchParams(newSearchParams);
+            return;
+        }
+
         setLoadingLocation(true);
         getLocation({ city: '', street: '', postalcode: postalCode })
             .then((response) => {
-                const newSearchParams = {
-                    ...Object.fromEntries(searchParams),
-                    distance,
-                    category,
-                };
-
+                newSearchParams.distance = distance;
+                newSearchParams.category = category;
                 if (!response.data.features[0]) {
                     console.error('Postalcode not found');
                     setPostalCode('');

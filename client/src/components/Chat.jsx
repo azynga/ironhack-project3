@@ -128,7 +128,13 @@ const Chat = () => {
                     className='feed col'
                     // style={{ width: 600, height: 600, overflow: 'scroll' }}
                 >
-                    {feed}
+                    {feed?.length > 0 && otherUser?.username ? (
+                        feed
+                    ) : (
+                        <div className='message own'>
+                            {'Contact ' + otherUser?.username}
+                        </div>
+                    )}
                     <div ref={endOfFeed}></div>
                 </div>
                 <form onSubmit={handleSendMessage}>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const service = axios.create({
-    baseURL: '/api',
+    baseURL: process.env.REACT_APP_API_URL,
 });
 
 const saveNotification = (userId, notification) => {
@@ -12,8 +12,12 @@ const getAllItemsOfUser = (userId) => {
     return service.get(`/users/${userId}/items`);
 };
 
+const getAllFavsOfUser = (userId) => {
+    return service.get(`/users/${userId}/favorites`);
+};
+
 const updateUser = (userId, property) => {
     return service.put('/users/' + userId, property);
 };
 
-export { saveNotification, getAllItemsOfUser, updateUser };
+export { saveNotification, getAllItemsOfUser, updateUser, getAllFavsOfUser };
