@@ -1,4 +1,4 @@
-The third project of the Ironhack Web Development Bootcamp.
+The third project of the Ironhack Web Development Bootcamp.  
 Made by Aljoscha Zynga
 
 # sellie
